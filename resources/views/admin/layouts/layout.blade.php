@@ -14,7 +14,7 @@
 
 	<link rel="canonical" href="https://demo-basic.adminkit.io/pages-blank.html" />
 
-	<title>first ecommerce</title>
+	<title>@yield('admin_page_title')</title>
 
 	<link href="{{asset('admin_asset/css/app.css')}}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -30,11 +30,11 @@
 
 				<ul class="sidebar-nav">
 					<li class="sidebar-header">
-						Pages
+						Main
 					</li>
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="index.html">
+					<li class="sidebar-item {{request()->routeIs('admin')?'active':''}}">
+						<a class="sidebar-link" href="{{route('admin')}}">
               <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
             </a>
 					</li>
@@ -57,7 +57,7 @@
             </a>
 					</li>
 
-					<li class="sidebar-item active">
+					<li class="sidebar-item ">
 						<a class="sidebar-link" href="pages-blank.html">
               <i class="align-middle" data-feather="book"></i> <span class="align-middle">Blank</span>
             </a>
