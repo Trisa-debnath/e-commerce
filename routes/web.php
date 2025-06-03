@@ -9,7 +9,7 @@ use App\Http\Controllers\Seller\SellerMainController;
 use App\Http\Controllers\Seller\SellerProductController;
 use App\Http\Controllers\Seller\SellerStoreController;
 use App\Http\Controllers\Customer\CustomerMainController;
-
+use App\Http\Controllers\MasterCategoryController;
 
 
 use App\Http\Controllers\ProfileController;
@@ -58,6 +58,13 @@ Route::controller(ProductDiscountController::class)->group(function () {
     Route::get('/discount/create','index')->name('discount.create');
     Route::get('/discount/manage','manage')->name('discount.manage');
 });
+
+Route::controller(MasterCategoryController::class)->group(function () {
+    Route::post('/store/categore','storecategore')->name('store.categore');
+    
+});
+
+
 
 
 }); 
