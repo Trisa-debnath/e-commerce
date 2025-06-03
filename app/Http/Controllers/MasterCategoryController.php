@@ -20,4 +20,30 @@ class MasterCategoryController extends Controller
       
 
     }
+
+ public function editcategore($id)
+    {
+        $editcat = Category::find($id);
+        return view('admin.category.edit', compact('editcat'));
+    }
+
+
+      public function deletecategore($id)
+    {
+        $catd = Category::find ($id);
+       $catd -> delete();
+        return redirect()-> route('category.manage')->with('error','category Deleted successfully.');
+    }
+
+
+        public function upcategore(Request $request, $id)
+    {
+        Category::where('id', $id)->update([
+            'category_name'=> $request->category_name
+         
+        ]);
+     
+ return redirect()-> route('category.manage')->with('success','Category update successfully.');
+    }
+
 }

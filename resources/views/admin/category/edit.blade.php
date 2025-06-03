@@ -3,7 +3,7 @@
 category create page
 @endsection
 @section('admin_layout')
-        <div class="message-success">
+        <div class="message success">
        @if(session('success'))
        <h3 class="mb-4">{{session('success')}}</h3>
         @endif
@@ -13,19 +13,19 @@ category create page
 						<div class="col-12 col-lg-6">
 							<div class="card">
 								<div class="card-header primary">
-									<h5 class=" card-title mb-1 ">create category</h5>
+	<h5 class=" card-title mb-1 ">update Category</h5>
 								</div>
-        <form action="{{ route('store.categore') }}"  method="POST" class="mb-4">
+        <form action="{{ route('update.categore', $editcat->id) }}"  method="POST" class="mb-4">
             @csrf
             <div class="card mb-4" >
                 <label for="category_name" class="mb-2">Category Name</label>
-                <input type="text" name="category_name" id="category_name" class="form-control" required placeholder="create category name " >
+                <input type="text" name="category_name" id="category_name" class="form-control" required placeholder="create category name " value="{{$editcat->category_name}}">
             </div>
          
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
-       </div>
-    </div>
+</div>
+</div>
 
 
 @endsection

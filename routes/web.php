@@ -61,7 +61,9 @@ Route::controller(ProductDiscountController::class)->group(function () {
 
 Route::controller(MasterCategoryController::class)->group(function () {
     Route::post('/store/categore','storecategore')->name('store.categore');
-    
+    Route::get('/edit/categore/{id}','editcategore')->name('edit.categore');
+    Route::get('/delete/categore/{id}','deletecategore')->name('delete.categore'); 
+    Route::post('/update/categore/{id}','upcategore')->name('update.categore');
 });
 
 

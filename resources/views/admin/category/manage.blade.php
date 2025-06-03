@@ -32,13 +32,13 @@ category create page
                         <td>{{ $category->category_name }}</td>
 
                         <td>
-                            <a href="#" method="GET"  class="btn btn-warning btn-sm">Edit</a>
-                            <form action="#" method="POST" style="display:inline;"></td>
+                            <a href="{{ route('edit.categore', $category->id)}}" method="GET"  class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('update.categore', $category->id)}}" method="POST" style="display:inline;"></td>
                             <td>
                                 @csrf
                                 @method('DELETE')
-                    
-                                <a href="#" method="GET"  class="btn btn-warning btn-sm">
+                   
+                                <a href="{{ route('delete.categore', $category->id)}}" method="GET"  class="btn btn-warning btn-sm">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete
                                 </a>
 
