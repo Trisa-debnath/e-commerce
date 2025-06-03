@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\ProductDiscountController;
 use App\Http\Controllers\Seller\SellerMainController;
 use App\Http\Controllers\Seller\SellerProductController;
 use App\Http\Controllers\Seller\SellerStoreController;
+use App\Http\Controllers\Customer\CustomerMainController;
+
 
 
 use App\Http\Controllers\ProfileController;
@@ -17,9 +19,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified','rolemanager:customer'])->name('dashboard');
 
 //admin 
 
@@ -79,8 +78,18 @@ Route::controller(SellerStoreController::class)->group(function () {
     Route::get('/store/create','index')->name('vendor.store');  
       Route::get('/store/manage','manage')->name('vendor.store.manage');  
 });
+}); 
+});
 
-
+//customer
+Route::middleware(['auth', 'verified','rolemanager:customer'])->group(function () {
+    Route::prefix('user')->group(function () {
+Route::controller(CustomerMainController::class)->group(function () {
+    Route::get('/dashboard','index')->name('dashboard');  
+     Route::get('/order/history','history')->name('customer.history');
+      Route::get('/setting/payment','payment')->name('customer.payment');    
+ Route::get('/affiliate','affiliate')->name('customer.affiliate');
+});
 
 
 }); 
