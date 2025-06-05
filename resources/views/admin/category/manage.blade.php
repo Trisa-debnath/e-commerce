@@ -3,11 +3,20 @@
 category create page
 @endsection
 @section('admin_layout')
+
         <div class="message">
-       @if(session('success'))
-       <h3 class="mb-4">{{session('success')}}</h3>
-        @endif
+    @if ($errors->any())
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+    @endif
+</div>
+
         <!-- category Form -->
         <div class="row">
 						<div class="col-12 col-lg-6">
@@ -15,6 +24,13 @@ category create page
 								<div class="card-header primary">
 									<h5 class="card-title mb-4 ">Manage category</h5>
 
+                                    
+       @if(session('success'))
+      <div class="alert alert-success">
+       <h3 class="mb-4">{{session('success')}}</h3>
+       </div>
+        @endif
+               
         <!-- category Table -->
         <table class="table table-bordered table-striped">
             <thead>
@@ -35,7 +51,9 @@ category create page
                             <a href="{{ route('edit.categore', $category->id)}}" method="GET"  class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('update.categore', $category->id)}}" method="POST" style="display:inline;"></td>
                             <td>
-                                @csrf
+
+
+                    @csrf
                                 @method('DELETE')
                    
                                 <a href="{{ route('delete.categore', $category->id)}}" method="GET"  class="btn btn-warning btn-sm">

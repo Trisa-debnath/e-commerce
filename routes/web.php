@@ -10,7 +10,7 @@ use App\Http\Controllers\Seller\SellerProductController;
 use App\Http\Controllers\Seller\SellerStoreController;
 use App\Http\Controllers\Customer\CustomerMainController;
 use App\Http\Controllers\MasterCategoryController;
-
+use App\Http\Controllers\MasterSubcategoryController;
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +26,7 @@ Route::middleware(['auth', 'verified','rolemanager:admin'])->group(function () {
     Route::prefix('admin')->group(function () {
 
 Route::controller(AdminMainController::class)->group(function () {
-    Route::get('admin/dashboard','index')->name('admin');
+    Route::get('/admin/dashboard','index')->name('admin');
     Route::get('/seeting','seeting')->name('admin.seeting');
     Route::get('/manage/users','manage_user')->name('admin.manage.user');
     Route::get('/manage/stores','manage_stores')->name('admin.manage.store');
@@ -66,7 +66,13 @@ Route::controller(MasterCategoryController::class)->group(function () {
     Route::post('/update/categore/{id}','upcategore')->name('update.categore');
 });
 
-
+Route::controller(MasterSubcategoryController::class)->group(function () {
+    Route::post('/store/subcategore','storesubcategore')->name('store.subcategore');
+    Route::get('/edit/subcategore/{id}','editsubcategore')->name('edit.subcategore');
+    Route::get('/delete/subcategore/{id}','deletesubcategore')->name('delete.subcategore'); 
+    Route::post('/update/subcategore/{id}','upsubcategore')->name('update.subcategore');
+   
+});
 
 
 }); 
