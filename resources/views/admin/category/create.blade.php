@@ -33,7 +33,7 @@ category create page
 								</div>
         <form action="{{ route('store.categore') }}"  method="POST" class="mb-4">
             @csrf
-            <div class="card mb-4" >
+            <div class="card col-12 col-lg-6" >
                 <label for="category_name" class="mb-2">Category Name</label>
                 <input type="text" name="category_name" id="category_name" class="form-control" required placeholder="create category name " >
             </div>

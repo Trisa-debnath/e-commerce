@@ -52,6 +52,14 @@ Route::controller(ProductController::class)->group(function () {
 Route::controller(ProductAttributeController::class)->group(function () {
     Route::get('/productattribute/create','index')->name('productattribute.create');
     Route::get('/productattribute/manage','manage')->name('productattribute.manage');
+
+ Route::post('/store/defaultattribute','storeattribute')->name('store.productattribute');
+    Route::get('/edit/defaultattribute/{id}','editattribute')->name('edit.productattribute');
+    Route::get('/delete/defaultattribute/{id}','deleteattribute')->name('delete.productattribute'); 
+    Route::post('/update/defaultattribute/{id}','upattribute')
+    ->name('update.productattribute');
+
+
 });
 
 Route::controller(ProductDiscountController::class)->group(function () {

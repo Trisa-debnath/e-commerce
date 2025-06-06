@@ -26,12 +26,10 @@ class MasterSubcategoryController extends Controller
        return redirect()->back()->with('success',  $subcat->subcategory_name." added Successfully.");
     }
 
-
  public function editsubcategore($id)
     {
         $editsubcat = Subcategory::find($id);
         $categorys = Category::all();
-
         return view('admin.subcategory.edit', compact('editsubcat','categorys'));
     }
 
@@ -39,32 +37,56 @@ class MasterSubcategoryController extends Controller
     {
         $subcatd = Subcategory::find ($id);
        $subcatd -> delete();
-        return redirect()-> route('subcategory.manage')->with('error','subcategory Deleted successfully.');
-    }
+        return redirect()-> route('subcategory.manage')->with('message','subcategory Deleted successfully.');
+   }
+       
+
+
      
-   public function upsubcategore(Request $request, $id)
-    {
-        $request->validate([
-            'subcategory_name' => 'required',
-            'category_id'=>'required|exists:categories,id'
-        ]);
+  /**  public function upsubcategore(Request $request, $id)
+  *  {
+   *     $request->validate([
+   *         'subcategory_name' => 'required',
+   *         'category_id'=>'required|exists:categories,id'
+   *     ]);
 
-        $subcategory = Subcategory::find($id);
+   *     $subcategory = Subcategory::find($id);
 
-        if ($request->subcategory_name ==  $subcategory ->subcategory_name) {
-            return redirect()->back()
-                ->withErrors(['subcategory_name' => 'You did not change the subcategory name.']);
-        }
-else
-         $subcategory ->subcategory_name = $request->subcategory_name;
-         $subcategory ->category_id = $request->category_id;
-         $subcategory ->save();
+   *     if ($request->subcategory_name ==  $subcategory ->subcategory_name) {
+    *        return redirect()->back()
+     *           ->withErrors(['subcategory_name' => 'You did not change the subcategory name.']);
+ *       }
+ *   else
+ *        $subcategory ->subcategory_name = $request->subcategory_name;
+ *        $subcategory ->category_id = $request->category_id;
+ *        $subcategory ->save();
+
+  *      return redirect()->route('subcategory.manage')
+  *          ->with('success', 'Sub Category updated successfully.');
+ *   }
+
+
+
+*/
+public function upsubcategore(Request $request, $id) {
+    $subcategory = Subcategory::findOrFail($id);
+    $validate_data =  $request->validate([
+        'subcategory_name' => 'required',
+        'category_id' => 'required|exists:categories,id'
+    ]);
+
+    if ($validate_data['subcategory_name'] == $subcategory->subcategory_name) {
+        return redirect()->back()
+            ->withErrors(['subcategory_name' => 'You did not change the subcategory name.']);
+    } else {
+        $subcategory->subcategory_name = $validate_data['subcategory_name'];
+        $subcategory->category_id = $validate_data['category_id'];
+        $subcategory->save();
 
         return redirect()->route('subcategory.manage')
             ->with('success', 'Sub Category updated successfully.');
     }
-
-
+}
 
 
 
