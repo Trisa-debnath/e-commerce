@@ -3,5 +3,5 @@
 dashboard
 @endsection
 @section('seller_layout')
-this is seller layout
+this is seller dashboard
 @endsection

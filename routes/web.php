@@ -56,8 +56,7 @@ Route::controller(ProductAttributeController::class)->group(function () {
  Route::post('/store/defaultattribute','storeattribute')->name('store.productattribute');
     Route::get('/edit/defaultattribute/{id}','editattribute')->name('edit.productattribute');
     Route::get('/delete/defaultattribute/{id}','deleteattribute')->name('delete.productattribute'); 
-    Route::post('/update/defaultattribute/{id}','upattribute')
-    ->name('update.productattribute');
+    Route::post('/update/defaultattribute/{id}','upattribute')->name('update.productattribute');
 
 
 });
@@ -99,7 +98,15 @@ Route::controller(SellerProductController::class)->group(function () {
 });
 Route::controller(SellerStoreController::class)->group(function () {
     Route::get('/store/create','index')->name('vendor.store');  
-      Route::get('/store/manage','manage')->name('vendor.store.manage');  
+    Route::get('/store/manage','manage')->name('vendor.store.manage'); 
+    Route::post('/store/published','store')->name('vendor.store.create');
+    Route::get('/edit/store/{id}','editstore')->name('edit.store');
+  
+    Route::delete('/delete/store/{id}', 'deletestore')->name('delete.store'); 
+    Route::post('/update/store/{id}','upstore')->name('update.store');
+   
+      
+      
 });
 }); 
 });
