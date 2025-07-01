@@ -17,7 +17,9 @@ class SellerProductController extends Controller
         return view('seller.product.create', compact('stores'));
     }
        public  function manage(){
-        return view('seller.product.manage');
+        $curentseller = Auth::id();
+        $products = Product::where('seller_id',$curentseller)->get();
+        return view('seller.product.manage', compact('products'));
     }
 
     public function store(Request $request){
@@ -57,7 +59,7 @@ class SellerProductController extends Controller
              'subcategory_id' => $request->subcategory_id,
 
         ]);
-         //'Images' => $request->Images,
+        
 
   if($request->hasFile('images')){
             foreach($request->file('images') as $image){
@@ -71,7 +73,7 @@ class SellerProductController extends Controller
             }
         }
 
-        return redirect()->back()->with('message', 'Product created successfully!');
+        return redirect()->back()->with('success', 'Product created successfully!');
 
     }
 }

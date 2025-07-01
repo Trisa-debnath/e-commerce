@@ -55,7 +55,7 @@ create product
               <!-- 	store_id  -->
              <div class="mb-3" >
                 <label for="store_id" class="form-label fw-bold text-dark" >Select Yours store for this product</label>
-                <select class="form-control" >
+                <select class="form-control" name="store_id" required >
     <option value=""> Select Yours store </option>
     @foreach($stores as $store)
     <option value="{{$store->id}}">{{$store->store_name}}</option>
