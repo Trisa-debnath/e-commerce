@@ -94,7 +94,8 @@ Route::controller(SellerMainController::class)->group(function () {
 });
 Route::controller(SellerProductController::class)->group(function () {
     Route::get('/product/create','index')->name('vendor.product');  
-      Route::get('/product/manage','manage')->name('vendor.product.manage');  
+      Route::get('/product/manage','manage')->name('vendor.product.manage');
+       Route::post('/store/seeler/product','store')->name('vendor.store.procuct');  
 });
 Route::controller(SellerStoreController::class)->group(function () {
     Route::get('/store/create','index')->name('vendor.store');  

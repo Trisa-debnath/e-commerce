@@ -1,4 +1,5 @@
 <div>
+    <label for="category_id" class="mb-2"  style="font-weight: bold; color: black;">Category Name</label>
    <select class="form-control" wire:model.live = "selectedCategory">
     <option value=""> Select A Category </option>
     @foreach($categories as $category)
@@ -7,7 +8,7 @@
    </select>
 
   
-
+<label for="subcategory_id" class="mb-2" style="font-weight: bold; color: black;">SubCategory Name</label>
     <select class="form-control" >
     <option value=""> Select A SubCategory </option>
     @foreach($subcategories as $subcategory)
