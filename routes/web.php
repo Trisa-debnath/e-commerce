@@ -11,14 +11,16 @@ use App\Http\Controllers\Seller\SellerStoreController;
 use App\Http\Controllers\Customer\CustomerMainController;
 use App\Http\Controllers\MasterCategoryController;
 use App\Http\Controllers\MasterSubcategoryController;
-
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomePageController;
+//use App\Livewire\HomePageComponent;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+Route::controller(HomePageController::class)->group(function () {
+    Route::get('/','index')->name('home');
+   
+});
 
 //admin 
 
