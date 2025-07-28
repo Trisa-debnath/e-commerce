@@ -41,33 +41,6 @@ class MasterSubcategoryController extends Controller
    }
        
 
-
-     
-  /**  public function upsubcategore(Request $request, $id)
-  *  {
-   *     $request->validate([
-   *         'subcategory_name' => 'required',
-   *         'category_id'=>'required|exists:categories,id'
-   *     ]);
-
-   *     $subcategory = Subcategory::find($id);
-
-   *     if ($request->subcategory_name ==  $subcategory ->subcategory_name) {
-    *        return redirect()->back()
-     *           ->withErrors(['subcategory_name' => 'You did not change the subcategory name.']);
- *       }
- *   else
- *        $subcategory ->subcategory_name = $request->subcategory_name;
- *        $subcategory ->category_id = $request->category_id;
- *        $subcategory ->save();
-
-  *      return redirect()->route('subcategory.manage')
-  *          ->with('success', 'Sub Category updated successfully.');
- *   }
-
-
-
-*/
 public function upsubcategore(Request $request, $id) {
     $subcategory = Subcategory::findOrFail($id);
     $validate_data =  $request->validate([

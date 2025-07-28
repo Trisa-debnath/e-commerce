@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\product;
 
 class AdminMainController extends Controller
 {
@@ -10,7 +11,8 @@ class AdminMainController extends Controller
         return view('admin.admin');
     }
 public  function seeting(){
-        return view('admin.seeting');
+    $products = Product::all();
+        return view('admin.seeting', compact('products'));
     }
     public  function manage_user(){
         return view('admin.manage.user');

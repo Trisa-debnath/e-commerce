@@ -115,9 +115,15 @@
       </div>
 
      <main>
+
+      <div >
+         @livewire('discount-product-component')
+      </div>
       
         @yield('home')
         @livewire('HomeSellerflashComponent')
+
+        
      </main>
     </div>
   </main>
