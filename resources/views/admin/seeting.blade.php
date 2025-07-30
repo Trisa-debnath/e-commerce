@@ -24,44 +24,53 @@ Home page setting
        <h3 class="mb-4">{{session('success')}}</h3>
         @endif
         </div>
-        <!-- category Form -->
+        <!-- Home setting  Form -->
         <div class="row">
 						<div class="col-12 col-lg-6">
 							<div class="card">
 								<div class="card-header primary">
 									<h5 class=" card-title mb-1 ">Home page Setting</h5>
 								</div>
-        <form action="#"  method="POST" class="mb-4">
+        <form action="{{route('home.setting.update')}}"  method="POST" class="mb-4">
             @csrf
+         
             <div class="card col-12 col-lg-6" >
+                 <label for="discount_heading" class="form-label">Discount Heading</label>
+                        <input type="text" name="discount_heading" id="discount_heading" class="form-control" required  value="{{$homepagesetting->discount_heading}}">
+
                 <label for="discounted_product_id" class="mb-2">Discounted Product</label>
                 <select name="discounted_product_id" id="discounted_product_id" class="form-control" required>
-                            <option value="">Select Discounted Product</option>
-                            @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->product_name }}</option>
+                    @foreach($products as $product)
+
+                            <option value="{{ $product->id }}" {{$homepagesetting->discounted_product_id == $product->id? 'selected':''}}>{{ $product->product_name }}
+
+                            </option>
+
                             @endforeach
                         </select>
 
         <label for="discount_percent" class="form-label">Discount Percent</label>
-                        <input type="number" name="discount_percent" id="discount_percent" class="form-control" required >
-
-                         <label for="discount_heading" class="form-label">Discount Heading</label>
-                        <input type="text" name="discount_heading" id="discount_heading" class="form-control" required >
-
+                        <input type="number" name="discount_percent" id="discount_percent" class="form-control" required value="{{$homepagesetting->discount_percent}}" >
 
                          <label for="featured_product_1_id" class="mb-2">featured_product_1_id</label>
                 <select name="featured_product_1_id" id="featured_product_1_id" class="form-control" required>
-                            <option value="">Featured Product 1</option>
                             @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->product_name }}</option>
+
+                            <option value="{{ $product->id }}" {{$homepagesetting->featured_product_1_id == $product->id? 'selected':''}}>{{ $product->product_name }}
+
+                            </option>
+
                             @endforeach
                         </select>
 
                          <label for="featured_product_2_id" class="mb-2">Featured Product 2</label>
                 <select name="featured_product_2_id" id="featured_product_2_id" class="form-control" required>
-                            <option value="">Featured Product 2</option>
                             @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->product_name }}</option>
+
+                            <option value="{{ $product->id }}" {{$homepagesetting->featured_product_2_id == $product->id? 'selected':''}}>{{ $product->product_name }}
+
+                            </option>
+
                             @endforeach
                         </select>
 

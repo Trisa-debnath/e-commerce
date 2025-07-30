@@ -30,6 +30,7 @@ Route::middleware(['auth', 'verified','rolemanager:admin'])->group(function () {
 Route::controller(AdminMainController::class)->group(function () {
     Route::get('/admin/dashboard','index')->name('admin');
     Route::get('/seeting','seeting')->name('admin.seeting');
+     Route::post('/admin/setting/update','homepage_settingupdate')->name('home.setting.update');
     Route::get('/manage/users','manage_user')->name('admin.manage.user');
     Route::get('/manage/stores','manage_stores')->name('admin.manage.store');
     Route::get('/cart/history','cart_history')->name('admin.cart.history');
