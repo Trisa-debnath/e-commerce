@@ -137,6 +137,33 @@
   }
 </style>
 
+
+
+{{-- 🖼️ Full-Width Slideshow of 5 Product Images --}}
+<div class="container-fluid px-0">
+  <div id="productSlider" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      @foreach ($sliderProducts as $key => $product)
+        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+          <img src="{{ asset('storage/' . $product->images->first()->img_path) }}"
+               alt="{{ $product->product_name }}"
+               class="d-block w-100" 
+               style="height: 500px; object-fit: cover; margin: 0; padding: 0;">
+        </div>
+      @endforeach
+    </div>
+
+    {{-- Navigation arrows --}}
+    <button class="carousel-control-prev" type="button" data-bs-target="#productSlider" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#productSlider" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+</div>
+
+
 {{-- 🔥 Flat Discount Section --}}
 <section id="hero">
   <div class="container py-5">
@@ -151,10 +178,12 @@
           </h2>
           <h4 class="text-dark">{{($homepagesetting->discount_heading)}}</h4>
           <p>Because of store opening carnival, Eclipse providing a huge discounted sell!</p>
-
+  {{-- discounted image --}}
           <div class="float-item mt-4">
-            <img src="{{ asset('home_asset/img/shoe.png') }}" alt="Discount Product" style="width: 100px;">
+ <img  src="{{ asset('storage/'. $homepagesetting->discountedProduct->images->first()->img_path) }}"
+             alt="Discount Product" style="width: 100%;">
           </div>
+
         </div>
       </div>
 
@@ -162,7 +191,7 @@
       <div class="col-lg-5">
         <div class="card-sm bg-purple text-white mb-3">
           <div class="product">
-            <img src="{{ asset('home_asset/img/beanbag.png') }}" alt="Bean Bag" style="width: 100%;">
+            <img  src="{{ asset('storage/'. $homepagesetting->featuredProduct1->images->first()->img_path) }}"alt="Bean Bag" style="width: 100%;">
           </div>
           <div class="mt-3">
             <h2 class="text-white">{{($homepagesetting->featuredProduct1->product_name)}}</h2>
@@ -170,7 +199,14 @@
           </div>
         </div>
 
+        {{-- down Side --}}
+
         <div class="card-sm bg-sky text-center">
+
+          <div class="product">
+            <img  src="{{ asset('storage/'. $homepagesetting->featuredProduct2->images->first()->img_path) }}"alt="Bean Bag" style="width: 100%;">
+          </div>
+          <div class="mt-3">
           <h2>{{($homepagesetting->featuredProduct2->product_name)}}</h2>
           <p>{{($homepagesetting->featuredProduct2->regular_price)}}</p>
         </div>
@@ -179,6 +215,9 @@
     </div>
   </div>
 </section>
+
+
+
 
 {{-- 🆕 New Arrivals Section --}}
 <div class="container py-5">
