@@ -217,7 +217,11 @@
 </section>
 
 
+{{-- homePageComponent--}}
 
+<div class="mt-4">
+    @livewire('HomePageComponent')
+  </div>
 
 {{-- 🆕 New Arrivals Section --}}
 <div class="container py-5">

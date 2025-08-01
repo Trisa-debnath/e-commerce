@@ -113,17 +113,16 @@
       <div class="time-flash">
         Time <span id="time">--:--:--</span>
       </div>
-
+ 
+      
      <main>
-
-    
         @yield('home')
-        @livewire('HomeSellerflashComponent')
-
-        
-     </main>
+        @livewire('HomeSellerflashComponent') 
+      </main>
     </div>
   </main>
+
+   
 
   <!-- Footer -->
   <footer id="footer">

@@ -2,13 +2,39 @@
 
 namespace App\Livewire;
 
-use App\Models\product;
+use App\Models\Product;
+use App\Models\Category;
 use Livewire\Component;
 
 class HomePageComponent extends Component
 {
-    public function render()
+   public $selectedCategory = null;
+    public $categories = [];
+
+    public function mount(): void
     {
-        return view('livewire.home-page-component', ['products' => Product::all()]);
+        $this->categories = Category::all();
+    }
+
+    public function filterByCategory($categoryId): void
+    {
+        $this->selectedCategory = $categoryId;
+    }
+
+      public function render()
+    {
+        $products = Product::with('images')
+            ->when($this->selectedCategory, function ($query) {
+                $query->where('category_id', $this->selectedCategory);
+            })
+            ->take(12)
+            ->get();
+
+        
+        return view('livewire.home-page-component', [
+            'products' => $products,
+            'categories' => $this->categories,
+            'selectedCategory' => $this->selectedCategory,
+        ]);
     }
 }
