@@ -62,7 +62,29 @@
     #footer a:hover {
       color: #fff;
     }
+
+    .btn-pink {
+    background: linear-gradient(to right, #e91e63, #f06292);
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    box-shadow: 0 4px 6px rgba(233, 30, 99, 0.3);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .btn-pink:hover {
+    background: linear-gradient(to right, #d81b60, #ec407a);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(233, 30, 99, 0.4);
+  }
   </style>
+
+   @livewireStyles
+   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+ 
 </head>
 
 <body>
@@ -118,6 +140,8 @@
      <main>
         @yield('home')
         @livewire('HomeSellerflashComponent') 
+  @livewire('CartManagerComponent') 
+        
       </main>
     </div>
   </main>
@@ -151,17 +175,40 @@
     </div>
   </footer>
 
+   @livewireScripts
+
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Live Time
-    function updateTime() {
-      const now = new Date();
-      const timeString = now.toLocaleTimeString('bn-BD');
-      document.getElementById('time').textContent = timeString;
-    }
-    setInterval(updateTime, 1000);
-    updateTime(); // Initial call
-  </script>
+ 
+  
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('notify', ({ title = 'Notification', type: icon = 'info' }) => {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+               icon: icon,
+                title: title,
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true
+            });
+        });
+    });
+</script>
+
+
+
+
+<script>
+  function updateTime() {
+    const now = new Date();
+    document.getElementById("time").innerText =
+      now.toLocaleTimeString('en-US', { hour12: true });
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
+</script>
 </body>
 </html>
