@@ -1,44 +1,40 @@
-<div>
-   <div class="dropdown me-2">
-  <button class="btn btn-warning position-relative d-flex align-items-center dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="fas fa-shopping-cart me-1"></i>
-    <span>Cart</span>
-    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-      {{ session('cart_count', 0) }}
-    </span>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-end p-3 shadow" style="min-width: 300px; max-height: 400px; overflow-y: auto;">
-    @php
-      $cart = session('cart', []);
-      $total = 0;
-    @endphp
+<div class="dropdown">
+    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        🛒 Cart ({{ count($cart) }})
+    </button>
+    <ul class="dropdown-menu p-3" style="min-width:300px;">
+        @forelse ($cart as $id => $item)
+            <li class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <strong>{{ $item['name'] }}</strong><br>
+                    <small>{{ $item['quantity'] }} × {{ $item['price'] }} = {{ $item['quantity'] * $item['price'] }}</small>
+                </div>
+                <div>
+                    <button wire:click="increaseQuantity({{ $id }})" class="btn btn-sm btn-success">+</button>
+                    <button wire:click="decreaseQuantity({{ $id }})" class="btn btn-sm btn-warning">-</button>
+                   
+<button wire:click="removeItem({{ $id }})" class="btn btn-sm btn-danger">
+    <i class="fas fa-trash"></i>
+</button>
 
-    @if(count($cart) > 0)
-      @foreach($cart as $key => $item)
-        @php $total += $item['price'] * $item['quantity']; @endphp
-        <li class="d-flex justify-content-between align-items-start mb-2 border-bottom pb-2">
-          <div class="me-2">
-            <strong>{{ $item['name'] }}</strong><br>
-            <small>Qty: {{ $item['quantity'] }} × ${{ $item['price'] }}</small>
-          </div>
-          <form method="POST" action="#">
-            @csrf
-            <button class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
-          </form>
-        </li>
-      @endforeach
-      <li class="mt-2 border-top pt-2">
-        <strong>Total: ${{ number_format($total, 2) }}</strong>
-      </li>
-      <li class="mt-2 text-center">
-        <a href="#" class="btn btn-sm btn-primary">View Cart</a>
-      </li>
-    @else
-      <li class="text-center text-muted">Your cart is empty.</li>
-    @endif
-  </ul>
+                </div>
+            </li>
+        @empty
+            <li class="text-center text-muted">Cart is empty</li>
+        @endforelse
+    </ul>
 </div>
 
+<script>
+document.addEventListener('notify', function(e) {
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon:  event.detail.type,
+        title: e.detail.title,
+        showConfirmButton: false,
+        timer: 2000
 
-
-</div>
+    });
+});
+</script>

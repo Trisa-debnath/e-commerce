@@ -90,7 +90,9 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark py-3">
+ 
+    <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top">
+
     <div class="container">
       <a class="navbar-brand" href="#">Trisha's Shop</a>
 
@@ -180,25 +182,22 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
  
-  
- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    document.addEventListener('livewire:init', () => {
-        Livewire.on('notify', ({ title = 'Notification', type: icon = 'info' }) => {
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-               icon: icon,
-                title: title,
-                showConfirmButton: false,
-                timer: 2500,
-                timerProgressBar: true
-            });
+    window.addEventListener('cart-updated', event => {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: event.detail.type,
+            title: event.detail.title,
+            showConfirmButton: false,
+            timer: 1500
         });
     });
 </script>
-
-
 
 
 <script>
