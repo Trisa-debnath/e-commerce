@@ -124,7 +124,31 @@
      
 
         <!-- Login Button -->
-        <a href="#" class="btn btn-outline-light"><i class="fas fa-user"></i> Login</a>
+
+<!-- Login / Register / Logout Button -->
+@guest
+
+   <a href="{{ route('login') }}" class="btn btn-outline-light">
+       <i class="fas fa-user"></i> Login
+   </a>
+   <a href="{{ route('register') }}" class="btn btn-outline-light">
+       <i class="fas fa-user-plus"></i> Register
+   </a>
+@endguest
+
+@auth
+   <form method="POST" action="{{ route('logout') }}" class="d-inline">
+       @csrf
+       <button type="submit" class="btn btn-outline-light">
+           <i class="fas fa-sign-out-alt"></i> Logout
+       </button>
+   </form>
+@endauth
+
+
+
+
+        
       </div>
     </div>
   </nav>
