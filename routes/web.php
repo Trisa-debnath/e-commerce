@@ -53,6 +53,7 @@ Route::controller(SubcategoryController::class)->group(function () {
 Route::controller(ProductController::class)->group(function () {
     Route::get('/product/manage','index')->name('product.manage');
     Route::get('/product/review/manage','review_manage')->name('product.manageproductreview');
+     Route::delete('/product/delete/{id}','destroy')->name('admin.product.destroy');
 });
 
 Route::controller(ProductAttributeController::class)->group(function () {
