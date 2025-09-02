@@ -105,9 +105,18 @@
           <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Categories</a>
+
+
+        @php
+  $categories = \App\Models\Category::all();
+@endphp
+
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Shoes</a></li>
-              <li><a class="dropdown-item" href="#">Clothing</a></li>
+              @foreach ($categories as $categori)
+                 <li><a class="dropdown-item" href="{{ route('productby.category', $categori->category_name) }}">{{$categori->category_name}}</a></li>
+              @endforeach
+             
+             
             </ul>
           </li>
           <li class="nav-item"><a class="nav-link" href="#">Cart</a></li>
@@ -118,14 +127,14 @@
        @livewire('ProductSearchComponent')
      
 <!-- Cart Dropdown Button -->
+ <div class="ms-4">
+      @livewire('ProductCartComponent')
+  </div>
 
-
-  @livewire('ProductCartComponent')
-     
-
-        <!-- Login Button -->
 
 <!-- Login / Register / Logout Button -->
+
+<div class="ms-4 d-flex gap-2">
 @guest
 
    <a href="{{ route('login') }}" class="btn btn-outline-light">
@@ -145,7 +154,7 @@
    </form>
 @endauth
 
-
+</div>
 
 
         

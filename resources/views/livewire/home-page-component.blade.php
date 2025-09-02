@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <!-- ✅ Included the Cart Manager Livewire Component -->
+      <!--  Included the Cart Manager Livewire Component -->
      
       <!-- 🛍️ Products Grid -->
       @forelse ($products as $product)
