@@ -80,7 +80,7 @@
     box-shadow: 0 6px 12px rgba(233, 30, 99, 0.4);
   }
   </style>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
    @livewireStyles
    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 

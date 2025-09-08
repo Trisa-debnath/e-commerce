@@ -137,17 +137,16 @@
   }
 </style>
 
-
-
 {{-- 🖼️ Full-Width Slideshow of 5 Product Images --}}
 <div class="container-fluid px-0">
   <div id="productSlider" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       @foreach ($sliderProducts as $key => $product)
-        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-          <img src="{{ asset('storage/' . $product->images->first()->img_path) }}"
-               alt="{{ $product->product_name }}"
-               class="d-block w-100" 
+    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+ <img 
+ src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->img_path) : asset('home_asset/img/default.png') }}"
+               alt="{{ $product->product_name ?? 'Default Product' }}"
+               class="d-block w-100"
                style="height: 500px; object-fit: cover; margin: 0; padding: 0;">
         </div>
       @endforeach
@@ -164,53 +163,118 @@
 </div>
 
 
-{{-- 🔥 Flat Discount Section --}}
-<section id="hero">
+{{-- 🔥 Discount & Featured Products Section --}}
+<section id="hero" class="py-5">
   <div class="container py-5">
-    <div class="row align-items-center">
+    <h3 class="mb-4 text-center fw-bold text-uppercase text-primary">🔥 Discounted Products</h3>
+    {{-- 🔥 Discounted Product Section --}}
+    <div class="card border-0 shadow-lg p-4">
+      <div class="row align-items-center">
 
-      {{-- Left Side --}}
-      <div class="col-lg-7">
-        <div class="card-lg mb-4 mb-lg-0">
-          <h2 class="display-3 text-danger fw-bold">
+        {{-- Left Side: Discount Text & Price & Add to Cart --}}
+        <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
+         
+            {{-- descount --}}
+           {{-- Discount % --}}
+@if($homepagesetting->discount_percent && $homepagesetting->discount_percent > 0)
+    <h2 class="display-3 fw-bold text-danger">
+        {{ number_format($homepagesetting->discount_percent) }}%
+    </h2>
+    <h4 class="fw-bold text-dark">
+        {{ $homepagesetting->discount_heading }}
+    </h4>
+      <h4 class="fw-bold text-dark">
+        {{ $homepagesetting->$discountedProduct->product_name }}
+    </h4>
+@else
+    <h2 class="display-3 fw-bold text-danger">
+        0%
+    </h2>
+    <h4 class="fw-bold text-dark">
+        {{ $homepagesetting->discount_heading ?? 'No Discount Available' }}
+    </h4>
+@endif
 
-           {{ number_format($homepagesetting->discount_percent) }}%
-          </h2>
-          <h4 class="text-dark">{{($homepagesetting->discount_heading)}}</h4>
-          <p>Because of store opening carnival, Eclipse providing a huge discounted sell!</p>
-  {{-- discounted image --}}
-          <div class="float-item mt-4">
- <img  src="{{ asset('storage/'. $homepagesetting->discountedProduct->images->first()->img_path) }}"
-             alt="Discount Product" style="width: 100%;">
-          </div>
+{{-- Price --}}
+@if($homepagesetting->discountedProduct)
+    <p class="fw-bold fs-5">
+        @if($homepagesetting->discount_percent > 0)
+            <span class="text-decoration-line-through text-muted">
+                $ {{ $homepagesetting->discountedProduct->regular_price }}
+            </span>
+            <span class="ms-2 text-success">
+                $ {{ $homepagesetting->discountedProduct->discounted_price }}
+            </span>
+        @else
+            <span class="text-success">
+                $ {{ $homepagesetting->discountedProduct->regular_price }}
+            </span>
+        @endif
+    </p>
+@endif
 
+
+          {{-- Add to Cart Button --}}
+          <button class="btn btn-success px-4 py-2 mt-2">
+            🛒 Add to Cart
+          </button>
+        </div>
+
+        {{-- Right Side: Product Image --}}
+        <div class="col-md-6 text-center">
+          @if($homepagesetting->discountedProduct && $homepagesetting->discountedProduct->images->first())
+<img src="{{ asset('storage/' . $homepagesetting->discountedProduct->images->first()->img_path) }}"
+alt="{{ $homepagesetting->discountedProduct->product_name ?? 'Discount Product' }}"
+                 class="img-fluid rounded shadow"
+                  style="height:450px; width:auto; object-fit:contain;
+                 ">
+
+          @else
+            <img src="{{ asset('home_asset/img/default.png') }}"
+                 alt="Default Product"
+                 class="img-fluid rounded shadow"
+                 style="height:450px; width:auto; object-fit:contain;">
+          @endif
         </div>
       </div>
+    </div>
 
-      {{-- Right Side --}}
-      <div class="col-lg-5">
-        <div class="card-sm bg-purple text-white mb-3">
-          <div class="product">
-            <img  src="{{ asset('storage/'. $homepagesetting->featuredProduct1->images->first()->img_path) }}"alt="Bean Bag" style="width: 100%;">
-          </div>
-          <div class="mt-3">
-            <h2 class="text-white">{{($homepagesetting->featuredProduct1->product_name)}}</h2>
-            <p>{{($homepagesetting->featuredProduct1->regular_price)}}</p>
-          </div>
+    {{-- Right Side: Featured Products --}}
+        <div class="row g-4">
+@foreach(['featuredProduct1', 'featuredProduct2'] as $featured)
+    <div class="col-md-6">
+        <div class="card border-0 shadow h-100 text-center {{ $featured == 'featuredProduct1' ? 'bg-purple text-white' : 'bg-sky text-dark' }}">
+            <div class="card-body p-3 p-lg-4 d-flex flex-column align-items-center">
+  <img src="{{ optional(optional($homepagesetting->$featured)->images->first())->img_path 
+     ? asset('storage/' . $homepagesetting->$featured->images->first()->img_path)
+                              : asset('home_asset/img/default.png') }}"
+                     alt="{{ $homepagesetting->$featured->product_name ?? 'Default Product' }}"
+                     class="img-fluid rounded mb-3"  
+                         style="height:450px; width:auto; object-fit:contain;">
+
+                <h5 class="fw-bold">{{ $homepagesetting->$featured->product_name ?? 'No Product Name' }}</h5>
+                
+                <p class="mb-2">
+                    <span class="text-decoration-line-through text-muted">
+                       $ {{ $homepagesetting->$featured->regular_price ?? 0 }}
+                    </span>
+                    <span class="ms-2 text-success">
+                       $ {{ $homepagesetting->$featured->discounted_price ?? $homepagesetting->$featured->regular_price ?? 0 }}
+                    </span>
+                </p>
+
+                {{-- Add to Cart Button --}}
+                <button class="btn btn-success px-3 py-2 mt-2">
+                    🛒 Add to Cart
+
+                </button>
+            </div>
         </div>
+    </div>
+@endforeach
+</div>
 
-        {{-- down Side --}}
 
-        <div class="card-sm bg-sky text-center">
-
-          <div class="product">
-            <img  src="{{ asset('storage/'. $homepagesetting->featuredProduct2->images->first()->img_path) }}"alt="Bean Bag" style="width: 100%;">
-          </div>
-          <div class="mt-3">
-          <h2>{{($homepagesetting->featuredProduct2->product_name)}}</h2>
-          <p>{{($homepagesetting->featuredProduct2->regular_price)}}</p>
-        </div>
-      </div>
 
     </div>
   </div>
@@ -218,34 +282,69 @@
 
 
 {{-- homePageComponent--}}
-
 <div class="mt-4">
-    @livewire('HomePageComponent')
-  </div>
+  @livewire('HomePageComponent')
+</div>
 
 {{-- 🆕 New Arrivals Section --}}
 <div class="container py-5">
   <h3 class="mb-4 text-center fw-bold text-uppercase text-success">🛍️ New Arrivals</h3>
   <div class="row">
-    @for ($i = 0; $i < 6; $i++)
-      <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
-        <div class="product_card w-100">
-          <img src="{{ asset('home_asset/img/shoe.png') }}" alt="Shoe Image" class="product_img">
-          <div class="pc_content">
+    @foreach ($products as $product)
+      <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex">
+        <div class="w-100 shadow-lg rounded-3 overflow-hidden" 
+             style="background:#fff; transition:0.3s ease; display:flex; flex-direction:column;">
+          
+          {{-- Product Image --}}
+          <img 
+            src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->img_path) : asset('home_asset/img/default.png') }}" 
+            alt="{{ $product->product_name }}" 
+            style="width:100%; height:280px; object-fit:cover; background:#f9f9f9; transition:0.4s ease;"
+            onmouseover="this.style.transform='scale(1.05)'" 
+            onmouseout="this.style.transform='scale(1)'" 
+          >
+
+          {{-- Product Details --}}
+          <div style="padding:18px; text-align:center; flex-grow:1; display:flex; flex-direction:column; justify-content:space-between;">
             <div>
-              <h2>Xion Shoe</h2>
-              <p class="pcc_in">In <a href="#">Shoe</a></p>
-              <p class="pcc_price">$502</p>
+              <h2 style="font-size:20px; font-weight:600; color:#333; margin-bottom:8px;">
+                {{ $product->product_name }}
+              </h2>
+
+              @if ($product->discounted_price && $product->discounted_price != 0)
+                <p style="color:#6f42c1; font-size:16px; font-weight:600; margin-bottom:5px;">
+                  Discount Price: {{ $product->discounted_price }}৳
+                </p>
+                <p style="text-decoration:line-through; color:#999; font-size:14px; margin:0;">
+                  {{ $product->regular_price }}৳
+                </p>
+              @else
+                <p style="color:#218838; font-size:16px; font-weight:600; margin:0;">
+                  Price: {{ $product->regular_price }}৳
+                </p>
+              @endif
             </div>
-            <div class="pcc_btns">
-              <button class="addtocart">Add To Cart</button>
-              <a href="#" class="viewbtn">View Details</a>
+
+            {{-- Buttons --}}
+            <div style="margin-top:15px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn-sm btn-pink" 
+              style=" border:none; border-radius:8px; padding:7px 14px; font-size:14px; cursor:pointer; transition:0.3s;">
+                
+                🛒 Add To Cart
+
+              </button>
+              <a href="#" 
+                 style="background:#007bff; color:#fff; text-decoration:none; border-radius:8px; padding:7px 14px; font-size:14px; transition:0.3s;">
+                🔍 View Details
+              </a>
             </div>
           </div>
+
         </div>
       </div>
-    @endfor
+    @endforeach
   </div>
 </div>
+
 
 @endsection

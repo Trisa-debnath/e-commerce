@@ -19,6 +19,9 @@
               </a></p>
               <p class="pcc_price">${{ $product->regular_price }}</p>
 
+
+              
+
               <div class="mt-auto">
 
  <!-- 🧠 This is add to cart component location -->
