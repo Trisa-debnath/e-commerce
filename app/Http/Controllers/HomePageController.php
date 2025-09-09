@@ -25,19 +25,71 @@ class HomePageController extends Controller
 
   if ($homepagesetting->discountedProduct) {
     $reg = $homepagesetting->discountedProduct->regular_price ?? 0;
-    $dis = $homepagesetting->discountedProduct->discounted_price ?? 0;
+    $percent = $homepagesetting->discount_percent ?? 0;
 
-    if ($reg > 0 && $dis > 0 && $dis < $reg) {
-        $homepagesetting->discount_percent = intval((($reg - $dis) / $reg) * 100);
-        $homepagesetting->discount_heading = "Special Discount!";
+    if ($reg > 0 && $percent > 0) {
+        // calculate discount price
+        $dis = intval($reg - (($percent / 100) * $reg));
+        $homepagesetting->discountedProduct->discounted_price = $dis;
     } else {
+        // if percent 0 , → discounted_price 0, only regular price show
+        $homepagesetting->discountedProduct->discounted_price = 0;
         $homepagesetting->discount_percent = 0;
-        $homepagesetting->discount_heading = "No Discount Available";
+    }
+}
+
+//for featureproduct1
+
+  if ($homepagesetting->featuredProduct1) {
+    $reg = $homepagesetting->featuredProduct1->regular_price ?? 0;
+    $percent = $homepagesetting->discount_percent ?? 0;
+
+    if ($reg > 0 && $percent > 0) {
+        // calculate discount price
+        $dis = intval($reg - (($percent / 100) * $reg));
+        $homepagesetting->featuredProduct1->discounted_price = $dis;
+    } else {
+        // if percent 0 , → discounted_price 0, only regular price show
+        $homepagesetting->featuredProduct1->discounted_price = 0;
+        $homepagesetting->discount_percent = 0;
+    }
+}
+
+//for featureproduct2
+
+  if ($homepagesetting->featuredProduct2) {
+    $reg = $homepagesetting->featuredProduct2->regular_price ?? 0;
+    $percent = $homepagesetting->discount_percent ?? 0;
+
+    if ($reg > 0 && $percent > 0) {
+        // calculate discount price
+        $dis = intval($reg - (($percent / 100) * $reg));
+        $homepagesetting->featuredProduct2->discounted_price = $dis;
+    } else {
+        // if percent 0 , → discounted_price 0, only regular price show
+        $homepagesetting->featuredProduct2->discounted_price = 0;
+        $homepagesetting->discount_percent = 0;
     }
 }
 
     //for new arrivals
 $products = Product::with('images')->get();
+
+$globalPercent = $homepagesetting->discount_percent ?? 0;
+
+foreach ($products as $product) {
+    $reg = $product->regular_price ?? 0;
+    $percent = $globalPercent; // use global discount
+
+    if ($reg > 0 && $percent > 0) {
+        $product->discounted_price = intval($reg - (($percent / 100) * $reg));
+        $product->discount_percent = $percent;
+    } else {
+        $product->discounted_price = 0;
+        $product->discount_percent = 0;
+    }
+}
+
    
 //for slider
    $sliderProducts = Product::with('images')
@@ -56,6 +108,10 @@ $products = Product::with('images')->get();
 public function showCategoryProducts($category_name){
     $category = category::where('category_name',$category_name)->firstOrFail();
     $products = Product::where('category_id',$category->id)->get();
+
+
+    
+
     return view('home.categories',compact('category','products'));
 
 }

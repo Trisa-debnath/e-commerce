@@ -174,17 +174,16 @@
         {{-- Left Side: Discount Text & Price & Add to Cart --}}
         <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
          
-            {{-- descount --}}
            {{-- Discount % --}}
 @if($homepagesetting->discount_percent && $homepagesetting->discount_percent > 0)
     <h2 class="display-3 fw-bold text-danger">
         {{ number_format($homepagesetting->discount_percent) }}%
     </h2>
-    <h4 class="fw-bold text-dark">
+    <h1 class="fw-bold text-dark">
         {{ $homepagesetting->discount_heading }}
-    </h4>
+    </h1>
       <h4 class="fw-bold text-dark">
-        {{ $homepagesetting->$discountedProduct->product_name }}
+        {{ $homepagesetting->discountedProduct->product_name }}
     </h4>
 @else
     <h2 class="display-3 fw-bold text-danger">
@@ -194,25 +193,30 @@
         {{ $homepagesetting->discount_heading ?? 'No Discount Available' }}
     </h4>
 @endif
-
-{{-- Price --}}
-@if($homepagesetting->discountedProduct)
+{{-- descount prize logic --}}
+@if($homepagesetting->discount_percent > 0 && $homepagesetting->discountedProduct->discounted_price > 0)
+    <h2 class="display-3 fw-bold text-danger">
+       {{ number_format($homepagesetting->discount_percent) }}% OFF   
+    </h2>
+    <h4 class="fw-bold text-dark">
+        {{ $homepagesetting->discount_heading }}
+    </h4>
     <p class="fw-bold fs-5">
-        @if($homepagesetting->discount_percent > 0)
-            <span class="text-decoration-line-through text-muted">
-                $ {{ $homepagesetting->discountedProduct->regular_price }}
-            </span>
-            <span class="ms-2 text-success">
-                $ {{ $homepagesetting->discountedProduct->discounted_price }}
-            </span>
-        @else
-            <span class="text-success">
-                $ {{ $homepagesetting->discountedProduct->regular_price }}
-            </span>
-        @endif
+        Price :
+        <span class="text-muted text-decoration-line-through">
+           $ {{ $homepagesetting->discountedProduct->regular_price }}
+        </span>
+        <span class="text-success fw-bold ms-2">
+            ${{ $homepagesetting->discountedProduct->discounted_price }}
+        </span>
+    </p>
+@else
+    <h2 class="display-3 fw-bold text-danger">0%</h2>
+    <h4 class="fw-bold text-dark">No Discount Available</h4>
+    <p class="fw-bold fs-5 text-success">
+        ${{ $homepagesetting->discountedProduct->regular_price }}
     </p>
 @endif
-
 
           {{-- Add to Cart Button --}}
           <button class="btn btn-success px-4 py-2 mt-2">
@@ -228,7 +232,6 @@ alt="{{ $homepagesetting->discountedProduct->product_name ?? 'Discount Product' 
                  class="img-fluid rounded shadow"
                   style="height:450px; width:auto; object-fit:contain;
                  ">
-
           @else
             <img src="{{ asset('home_asset/img/default.png') }}"
                  alt="Default Product"
@@ -255,10 +258,11 @@ alt="{{ $homepagesetting->discountedProduct->product_name ?? 'Discount Product' 
                 <h5 class="fw-bold">{{ $homepagesetting->$featured->product_name ?? 'No Product Name' }}</h5>
                 
                 <p class="mb-2">
-                    <span class="text-decoration-line-through text-muted">
+                 <span class="text-decoration-line-through" style="color: yellow;">
                        $ {{ $homepagesetting->$featured->regular_price ?? 0 }}
                     </span>
-                    <span class="ms-2 text-success">
+                  
+                      <span class="ms-2 text-white">
                        $ {{ $homepagesetting->$featured->discounted_price ?? $homepagesetting->$featured->regular_price ?? 0 }}
                     </span>
                 </p>
@@ -310,19 +314,26 @@ alt="{{ $homepagesetting->discountedProduct->product_name ?? 'Discount Product' 
               <h2 style="font-size:20px; font-weight:600; color:#333; margin-bottom:8px;">
                 {{ $product->product_name }}
               </h2>
+@if ($product->discounted_price > 0)
 
-              @if ($product->discounted_price && $product->discounted_price != 0)
-                <p style="color:#6f42c1; font-size:16px; font-weight:600; margin-bottom:5px;">
-                  Discount Price: {{ $product->discounted_price }}৳
+ <small style="color:#dc3545;"> 
+{{ number_format($product->discount_percent) }}% OFF 
+                      </small></br>
+                      <p class="fw-bold fs-5">
+Price :
+<span style="text-decoration:line-through; color:#0ea3c9; font-size:14px; margin:0;">
+ ${{ $product->regular_price }}
+                </span>
+                 <span style="color:#6f42c1; font-size:16px; font-weight:600; margin-bottom:5px;">
+ ${{ $product->discounted_price }}  </span>
+                      </p>
+
+@else
+   <p style="color:#218838; font-size:16px; font-weight:600; margin:0;">
+                  Price: ${{ $product->regular_price }}
                 </p>
-                <p style="text-decoration:line-through; color:#999; font-size:14px; margin:0;">
-                  {{ $product->regular_price }}৳
-                </p>
-              @else
-                <p style="color:#218838; font-size:16px; font-weight:600; margin:0;">
-                  Price: {{ $product->regular_price }}৳
-                </p>
-              @endif
+@endif
+
             </div>
 
             {{-- Buttons --}}

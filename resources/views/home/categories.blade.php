@@ -18,6 +18,16 @@
                 {{ $product->category->category_name ?? 'Uncategorized' }}
               </a></p>
               <p class="pcc_price">${{ $product->regular_price }}</p>
+              
+@if($product->discounted_price)
+    <p class="pcc_price">
+        <span class="text-decoration-line-through text-muted">${{ $product->regular_price }}</span>
+        <span class="text-success ms-2">${{ $product->discounted_price }}</span>
+        <small class="text-danger ms-1">({{ $product->discount_percent }}% OFF)</small>
+    </p>
+@else
+    <p class="pcc_price">${{ $product->regular_price }}</p>
+@endif
 
 
               
