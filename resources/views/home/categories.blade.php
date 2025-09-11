@@ -17,21 +17,31 @@
               <p class="pcc_in">In <a href="#">
                 {{ $product->category->category_name ?? 'Uncategorized' }}
               </a></p>
-              <p class="pcc_price">${{ $product->regular_price }}</p>
+                        {{-- Price & Discount --}}
+              <p class="pcc_price">
+                 @if ($product->discounted_price > 0)
+                 <small style="color:#dc3545;"> 
+                  {{ number_format($product->discount_percent) }}% OFF 
+                      </small></br>
+                      <p class="fw-bold fs-5">
+                 Price :
+               <span style="text-decoration:line-through; color:#0ea3c9; font-size:14px; margin:0;">
+                 ${{ $product->regular_price }}
+                </span>
+                 <span style="color:#6f42c1; font-size:16px; font-weight:600; margin-bottom:5px;">
+               ${{ $product->discounted_price }}  </span>
+                      </p>
+
+         @else
+              <p style="color:#218838; font-size:16px; font-weight:600; margin:0;">
+                  Price: ${{ $product->regular_price }}
+                </p>
+               @endif
+
+
+
+              </p>
               
-@if($product->discounted_price)
-    <p class="pcc_price">
-        <span class="text-decoration-line-through text-muted">${{ $product->regular_price }}</span>
-        <span class="text-success ms-2">${{ $product->discounted_price }}</span>
-        <small class="text-danger ms-1">({{ $product->discount_percent }}% OFF)</small>
-    </p>
-@else
-    <p class="pcc_price">${{ $product->regular_price }}</p>
-@endif
-
-
-              
-
               <div class="mt-auto">
 
  <!-- 🧠 This is add to cart component location -->

@@ -50,7 +50,32 @@
               <p class="pcc_in">In <a href="#">
                 {{ $product->category->category_name ?? 'Uncategorized' }}
               </a></p>
-              <p class="pcc_price">${{ $product->regular_price }}</p>
+              <p class="pcc_price">
+
+          {{-- Price & Discount --}}
+          <span>
+                 @if ($product->discounted_price > 0)
+                 <small style="color:#dc3545;"> 
+                  {{ number_format($product->discount_percent) }}% OFF 
+                      </small></br>
+                      <p class="fw-bold fs-5">
+                 Price :
+               <span style="text-decoration:line-through; color:#0ea3c9; font-size:14px; margin:0;">
+                 ${{ $product->regular_price }}
+                </span>
+                 <span style="color:#6f42c1; font-size:16px; font-weight:600; margin-bottom:5px;">
+               ${{ $product->discounted_price }}  </span>
+                      </p>
+
+         @else
+              <p style="color:#218838; font-size:16px; font-weight:600; margin:0;">
+                  Price: ${{ $product->regular_price }}
+                </p>
+               @endif
+</span>
+
+
+            
 
               <div class="mt-auto">
 

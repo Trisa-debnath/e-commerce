@@ -314,38 +314,32 @@ alt="{{ $homepagesetting->discountedProduct->product_name ?? 'Discount Product' 
               <h2 style="font-size:20px; font-weight:600; color:#333; margin-bottom:8px;">
                 {{ $product->product_name }}
               </h2>
-@if ($product->discounted_price > 0)
-
- <small style="color:#dc3545;"> 
-{{ number_format($product->discount_percent) }}% OFF 
+             @if ($product->discounted_price > 0)
+                 <small style="color:#dc3545;"> 
+                  {{ number_format($product->discount_percent) }}% OFF 
                       </small></br>
                       <p class="fw-bold fs-5">
-Price :
-<span style="text-decoration:line-through; color:#0ea3c9; font-size:14px; margin:0;">
- ${{ $product->regular_price }}
+                 Price :
+               <span style="text-decoration:line-through; color:#0ea3c9; font-size:14px; margin:0;">
+                 ${{ $product->regular_price }}
                 </span>
                  <span style="color:#6f42c1; font-size:16px; font-weight:600; margin-bottom:5px;">
- ${{ $product->discounted_price }}  </span>
+               ${{ $product->discounted_price }}  </span>
                       </p>
 
-@else
-   <p style="color:#218838; font-size:16px; font-weight:600; margin:0;">
+         @else
+              <p style="color:#218838; font-size:16px; font-weight:600; margin:0;">
                   Price: ${{ $product->regular_price }}
                 </p>
-@endif
+               @endif
 
             </div>
 
             {{-- Buttons --}}
             <div style="margin-top:15px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
-              <button class="btn btn-sm btn-pink" 
-              style=" border:none; border-radius:8px; padding:7px 14px; font-size:14px; cursor:pointer; transition:0.3s;">
-                
-                🛒 Add To Cart
-
-              </button>
-              <a href="#" 
-                 style="background:#007bff; color:#fff; text-decoration:none; border-radius:8px; padding:7px 14px; font-size:14px; transition:0.3s;">
+   {{-- 🛒 Livewire Add To Cart --}}
+   @livewire('cart-manager-component', ['product' => $product], key('new-arrival-'.$product->id))
+   <a href="#"   style="background:#007bff; color:#fff; text-decoration:none; border-radius:8px; padding:7px 14px; font-size:14px; transition:0.3s;">
                 🔍 View Details
               </a>
             </div>
