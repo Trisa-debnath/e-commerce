@@ -41,11 +41,16 @@
 
 
               </p>
-              
-              <div class="mt-auto">
 
+          <!--button for  add to cart-->     
+ <div style="margin-top:15px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                
  <!-- 🧠 This is add to cart component location -->
    @livewire('cart-manager-component', ['product' => $product], key($product->id))
+          <!--for view details-->  
+    <a href="{{ route('products.viewdetails', $product->id) }}"   style="background:#007bff; color:#fff; text-decoration:none; border-radius:8px; padding:7px 14px; font-size:14px; transition:0.3s;">
+               🔍 View Details
+              </a>
 
   </div>
            

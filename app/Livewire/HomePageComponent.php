@@ -36,7 +36,7 @@ class HomePageComponent extends Component
             ->take(12)
             ->get();
              
-      // 🔥 Discount calculation based on admin setting
+      //  Discount calculation based on admin setting
         foreach ($products as $product) {
             $regular = $product->regular_price ?? 0;
             $percent = $this->globalDiscount;

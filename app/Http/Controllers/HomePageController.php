@@ -127,4 +127,27 @@ public function showCategoryProducts($category_name){
 
 }
 
+public function viewdetails($id){
+
+// Product with images & category
+    $product = Product::with('images', 'category')->findOrFail($id);
+
+    // global discount
+    $homepagesetting = HomePageSetting::first();
+    $percent = $homepagesetting->discount_percent ?? 0;
+    $reg = $product->regular_price ?? 0;
+
+    if ($reg > 0 && $percent > 0) {
+        $product->discounted_price = intval($reg - (($percent / 100) * $reg));
+        $product->discount_percent = $percent;
+    } else {
+        $product->discounted_price = 0;
+        $product->discount_percent = 0;
+    }
+
+  return view('home.viewdetails', compact('product'));   
+}
+
+
+
 }
