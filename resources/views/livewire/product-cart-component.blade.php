@@ -30,7 +30,7 @@ document.addEventListener('notify', function(e) {
     Swal.fire({
         toast: true,
         position: 'top-end',
-        icon:  event.detail.type,
+        icon:  e.detail.type,
         title: e.detail.title,
         showConfirmButton: false,
         timer: 2000

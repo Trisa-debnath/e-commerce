@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trisha's Shop</title>
+    <link rel="icon" type="image/png" href="{{ asset('home_asset/img/favi.png') }}">
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -16,7 +17,7 @@
       background-color: #f8f9fa;
     }
     .navbar {
-      background: linear-gradient(to right, #e91e63, #9c27b0);
+      background: linear-gradient(to right, #90db2e, #df4399);
     }
     .navbar-brand {
       color: #fff !important;
@@ -90,11 +91,16 @@
 <body>
 
   <!-- Navbar -->
- 
-    <nav class="navbar navbar-expand-lg navbar-dark py-3 sticky-top">
 
+    <nav class="navbar navbar-expand-lg navbar-dark py-1 sticky-top">
+ 
     <div class="container">
-      <a class="navbar-brand" href="#">Trisha's Shop</a>
+     
+
+      <a class="navbar-brand" href="{{url('/')}}">
+    <img src="{{ asset('home_asset/img/logo.png') }}" 
+    alt="logo" height="60px">
+</a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
         <span class="navbar-toggler-icon"></span>
@@ -102,7 +108,7 @@
 
       <div class="collapse navbar-collapse" id="mainNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{url('/')}}">Home</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Categories</a>
 
@@ -119,7 +125,8 @@
              
             </ul>
           </li>
-          <li class="nav-item"><a class="nav-link" href="#">Cart</a></li>
+         
+          
           <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         </ul>
 
@@ -228,6 +235,19 @@
             title: event.detail.title,
             showConfirmButton: false,
             timer: 1500
+        });
+    });
+
+     //  notify 
+    window.addEventListener('notify', event => {
+        const data = event.detail[0];  
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: data.type,
+            title: data.title,
+            showConfirmButton: false,
+            timer: 2000
         });
     });
 </script>

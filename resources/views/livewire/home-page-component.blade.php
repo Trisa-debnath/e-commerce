@@ -43,7 +43,10 @@
           <div class="card product_card h-100 shadow-sm">
             <img src="{{ asset('storage/'.($product->images[0]?->img_path ?? 'default.png')) }}" 
                  class="product_img" 
-                 alt="{{ $product->product_name }}">
+                 alt="{{ $product->product_name }}"
+
+                 style="width:100%; height:300px; object-fit:cover; background:#f9f9f9; transition:0.4s ease;">
+
 
             <div class="card-body text-center d-flex flex-column">
               <h5>{{ $product->product_name }}</h5>

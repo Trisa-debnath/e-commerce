@@ -3,7 +3,8 @@
 
 
       
-
+<div class="container py-4">
+   <div class="row">
       @forelse ($products as $product)
 
         <div class="col-lg-4 col-md-6 mb-4">
@@ -69,6 +70,8 @@
 
 
       @endforelse
+      </div>
+</div>
 
      
               
