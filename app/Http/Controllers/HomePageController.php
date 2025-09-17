@@ -6,6 +6,7 @@ use App\Models\category;
 use App\Models\HomePageSetting;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class HomePageController extends Controller
 {
@@ -124,14 +125,13 @@ public function showCategoryProducts($category_name){
         }
     }
     return view('home.categories',compact('category','products'));
-
 }
 
-public function viewdetails($id){
 
+
+public function viewdetails($id){
 // Product with images & category
     $product = Product::with('images', 'category')->findOrFail($id);
-
     // global discount
     $homepagesetting = HomePageSetting::first();
     $percent = $homepagesetting->discount_percent ?? 0;
@@ -147,6 +147,27 @@ public function viewdetails($id){
 
   return view('home.viewdetails', compact('product'));   
 }
+
+
+public function orderproceed(){
+      $cart = Session::get('cart', []);
+    return view('home.orderproceed', compact('cart'));
+}
+
+         public function orderstore(Request $request)
+    {
+        $cart = Session::get('cart', []);
+        if(empty($cart)) {
+            return redirect()->back()->with('error', 'Cart is empty!');
+        }
+
+        Session::forget('cart');
+
+        return redirect()->route('order.success')->with('success', 'Order placed successfully!');
+    }
+
+    
+
 
 
 

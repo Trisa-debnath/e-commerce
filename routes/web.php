@@ -21,10 +21,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(HomePageController::class)->group(function () {
     Route::get('/','index')->name('home');
-  
    Route::get('/category/{category_name}','showCategoryProducts')->name('productby.category');
   Route::get('/viewdetails/{id}','viewdetails')->name('products.viewdetails');
+   Route::get('/order/proceed','orderproceed')->name('order.proceed');
+    Route::post('/order/store','orderstore')->name('order.store');
   
+Route::get('/order/success', function() {return view('home.ordersuccess');
+})->name('order.success');
+  
+  
+
+
 });
 
 

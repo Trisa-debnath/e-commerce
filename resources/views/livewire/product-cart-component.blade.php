@@ -22,6 +22,14 @@
         @empty
             <li class="text-center text-muted">Cart is empty</li>
         @endforelse
+
+   <!-- for payball option -->
+        @if(count($cart) > 0)
+    <li class="mt-2 text-center">
+        <a href="{{ route('order.proceed') }}" class="btn btn-primary btn-sm">Proceed to Order</a>
+    </li>
+@endif
+
     </ul>
 </div>
 
