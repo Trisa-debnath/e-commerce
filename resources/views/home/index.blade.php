@@ -219,9 +219,16 @@
 @endif
 
           {{-- Add to Cart Button --}}
-          <button class="btn btn-success px-4 py-2 mt-2">
-            🛒 Add to Cart
-          </button>
+ <div style="margin-top:15px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+   {{-- 🛒 Livewire Add To Cart --}}
+  @livewire('cart-manager-component', ['product' => $homepagesetting->discountedProduct], key('discounted-'.$homepagesetting->discountedProduct->id))
+ 
+   <a href="{{ route('products.viewdetails', $homepagesetting->discountedProduct->id) }}"   style="background:#007bff; color:#fff; text-decoration:none; border-radius:8px; padding:7px 14px; font-size:14px; transition:0.3s;">
+                🔍 View Details
+              </a>
+            </div>
+
+         
         </div>
 
         {{-- Right Side: Product Image --}}
@@ -268,10 +275,7 @@ alt="{{ $homepagesetting->discountedProduct->product_name ?? 'Discount Product' 
                 </p>
 
                 {{-- Add to Cart Button --}}
-                <button class="btn btn-success px-3 py-2 mt-2">
-                    🛒 Add to Cart
-
-                </button>
+                
             </div>
         </div>
     </div>
