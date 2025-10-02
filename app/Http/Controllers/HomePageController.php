@@ -7,6 +7,9 @@ use App\Models\HomePageSetting;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\Order;
 
 class HomePageController extends Controller
 {
@@ -149,9 +152,15 @@ public function viewdetails($id){
 }
 
 
+      
+ 
 public function orderproceed(){
       $cart = Session::get('cart', []);
-    return view('home.orderproceed', compact('cart'));
+
+    $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+
+    return view('home.orderproceed', compact('cart', 'total'));
+
 }
 
          public function orderstore(Request $request)
@@ -161,11 +170,33 @@ public function orderproceed(){
             return redirect()->back()->with('error', 'Cart is empty!');
         }
 
-        Session::forget('cart');
+         $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+          Session::forget('cart');
+         $order = new Order();
+    $order->name = $request->name;
+    $order->phone = $request->phone;
+    $order->email = $request->email;
+    $order->address = $request->address ?? null;
+    $order->user_id = Auth::id();
+  
+    $order->total = $total;
+    $order->payment_method = $request->payment_method;
 
-        return redirect()->route('order.success')->with('success', 'Order placed successfully!');
+     if ($request->payment_method === 'cod') {
+        $order->payment_status = 'pending'; 
+    } else {
+        $order->payment_status = 'paid'; 
     }
 
+    $order->status = 'pending'; // delivery status
+    $order->save();
+
+       
+
+        return redirect()->route('order.success')->with('success', 'Order placed successfully!' . strtoupper($order->payment_method) . '!' ) ->with('total', $total); 
+    }
+
+    
     
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HomePageSetting;
 use Illuminate\Http\Request;
 use App\Models\product;
+use App\Models\Order;
 
 class AdminMainController extends Controller
 {
@@ -45,7 +46,8 @@ $homepagesetting->save();
         return view('admin.manage.store');
     }
     public  function cart_history(){
-        return view('admin.cart.history');
+         $orders = Order::latest()->paginate(10);
+        return view('admin.cart.history', compact('orders'));
     }
     public  function order_history(){
         return view('admin.order.history');

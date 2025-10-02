@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
 
+            $table->id();
     $table->string('name')->nullable();
     $table->string('email')->nullable();
     $table->string('Phone')->nullable();
@@ -22,6 +22,7 @@ return new class extends Migration
     $table->decimal('total', 10, 2);
     $table->string('payment_method')->default('cod'); 
     $table->string('payment_status')->default('pending'); 
+    
    
 $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 

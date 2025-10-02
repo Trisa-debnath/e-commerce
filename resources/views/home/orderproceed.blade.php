@@ -1,8 +1,8 @@
 @extends('layouts.user')
 @section('home')
 
-
 <h3>Order Summary</h3>
+
 @if(count($cart) > 0)
     <ul class="list-group mb-3">
         @foreach($cart as $id => $item)
@@ -10,19 +10,27 @@
                 {{ $item['name'] }} × {{ $item['quantity'] }}
                 <span>${{ $item['quantity'] * $item['price'] }}</span>
             </li>
-        @endforeach
-    </ul>
+        @endforeach       
+    
+    {{-- Total Price --}}
+    <li class="list-group-item d-flex justify-content-between border border-primary rounded">
+        <strong>Total:</strong>
+        <span>${{ $total }}</span>
+    </li>
+   
+  </ul>
+
     <form method="POST" action="{{ route('order.store') }}">
         @csrf
         
-         <div class="mb-3">
+        <div class="mb-3">
             <label>Name</label>
             <input type="text" name="name" class="form-control" required>
         </div>
 
         <div class="mb-3">
             <label>Phone</label>
-            <input type="text" name="Phone" class="form-control" required>
+            <input type="text" name="phone" class="form-control" required>
         </div>
 
         <div class="mb-3">
@@ -30,13 +38,26 @@
             <input type="email" name="email" class="form-control">
         </div>
 
-       
-  {{-- Payment Method --}}
-    <div class="mb-3">
-        <label>Select Payment Method</label><br>
-        <input type="radio" name="payment_method" value="cod" checked> Cash on Delivery <br>
-        <input type="radio" name="payment_method" value="card"> Pay Using Card
-    </div>
+        {{-- Payment Method --}}
+        <div class="mb-3">
+            <h4>Select Payment Option</h4>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" value="cod" required>
+                <label class="form-check-label">Cash On Delivery</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" value="card">
+                <label class="form-check-label">Pay by Card</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" value="bkash">
+                <label class="form-check-label">Pay by Bkash</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" value="nagad">
+                <label class="form-check-label">Pay by Nagad</label>
+            </div>
+        </div>
 
         <button type="submit" class="btn btn-success">Confirm Order</button>
     </form>
