@@ -45,10 +45,7 @@
                 <input class="form-check-input" type="radio" name="payment_method" value="cod" required>
                 <label class="form-check-label">Cash On Delivery</label>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="payment_method" value="card">
-                <label class="form-check-label">Pay by Card</label>
-            </div>
+            
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="payment_method" value="bkash">
                 <label class="form-check-label">Pay by Bkash</label>
@@ -57,6 +54,16 @@
                 <input class="form-check-input" type="radio" name="payment_method" value="nagad">
                 <label class="form-check-label">Pay by Nagad</label>
             </div>
+  
+<div class="card border-primary shadow-sm my-3" style="max-width: 300px; border-radius: 12px;">
+    <div class="card-body text-center">
+        <h5 class="card-title text-primary mb-3">Payment Option</h5>
+        <a href="{{ url('stripe', $total) }}" 
+           class="btn btn-outline-primary px-4 py-2 rounded-pill fw-semibold">
+           💳 Pay by Card
+        </a>
+    </div>
+
         </div>
 
         <button type="submit" class="btn btn-success">Confirm Order</button>

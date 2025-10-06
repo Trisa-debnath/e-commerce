@@ -28,10 +28,13 @@ Route::controller(HomePageController::class)->group(function () {
   
 Route::get('/order/success', function() {return view('home.ordersuccess');
 })->name('order.success');
-  
-  
+Route::get('/order/cancel', function() {
+    return view('home.ordercancel'); 
+})->name('order.cancel');
 
-
+  
+Route::get('/stripe/{total}','stripe')->name('order.stripe');
+Route::post('/stripe/post','stripePost')->name('stripe.post');
 });
 
 

@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Order;
+use Stripe\Stripe;
+use Stripe\Charge;
+use Stripe\Checkout\Session as StripeSession;
 
 class HomePageController extends Controller
 {
@@ -197,9 +200,35 @@ public function orderproceed(){
     }
 
     
-    
+   public function stripe($total)
+{
+    return view('home.stripe', compact('total'));
+}
 
+public function stripePost(Request $request)
+{
+    $request->validate([
+        'total' => 'required|numeric|min:1',
+        'stripeToken' => 'required',
+    ]);
 
+    try {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        Charge::create([
+            "amount" => $request->total * 100, // in cents
+            "currency" => "usd",
+            "source" => $request->stripeToken,
+            "description" => "Payment for Cart Order",
+        ]);
+
+        Session::flash('success', 'Payment successful!');
+    } catch (\Exception $e) {
+        Session::flash('error', $e->getMessage());
+    }
+
+    return redirect()->back();
+}
 
 
 }
