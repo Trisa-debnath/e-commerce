@@ -49,10 +49,38 @@ $homepagesetting->save();
          $orders = Order::latest()->paginate(10);
         return view('admin.cart.history', compact('orders'));
     }
+//order
+
     public  function order_history(){
-        return view('admin.order.history');
+    $orders = Order::with('products')->latest()->paginate(10);
+    return view('admin.order.history', compact('orders'));
+    }
+      public function order_show($id)
+    {
+        $order = Order::findOrFail($id);
+        return view('admin.orders.show', compact('order'));
     }
 
+      public function order_edit($id)
+    {
+        $order = Order::findOrFail($id);
+        return view('admin.orders.edit', compact('order'));
+    }
 
+     public function rder_update(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->update($request->all());
+        return redirect()->route('admin.orders.history')->with('success', 'Order updated successfully!');
+    }
+
+    public function order_destroy($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->delete();
+        return back()->with('success', 'Order deleted successfully!');
+    }
+
+   
 
 }

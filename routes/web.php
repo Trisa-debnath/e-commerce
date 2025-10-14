@@ -50,7 +50,14 @@ Route::controller(AdminMainController::class)->group(function () {
     Route::get('/manage/users','manage_user')->name('admin.manage.user');
     Route::get('/manage/stores','manage_stores')->name('admin.manage.store');
     Route::get('/cart/history','cart_history')->name('admin.cart.history');
+    //order history
     Route::get('/order/history','order_history')->name('admin.order.history');
+  Route::get('/order/show/{id}', 'order_show')->name('admin.order.show');
+  Route::get('/order/edit/{id}', 'order_edit')->name('admin.order.edit');
+  Route::put('/order/update/{id}', 'order_update')->name('admin.order.update');
+   Route::delete('/order/delete/{id}', 'order_destroy')->name('admin.order.destroy');
+  
+
 });
 
 Route::controller(CategoryController::class)->group(function () {

@@ -21,21 +21,41 @@ order history page
                 <table class="table table-bordered table-hover align-middle">
                     <thead class="table-dark text-center">
                         <tr>
-                            <th>#</th>
-                            <th>Customer</th>
-                            <th>Total</th>
-                            <th>Payment Method</th>
-                            <th>Payment Status</th>
-                            <th>Order Status</th>
-                            <th>Date</th>
-                            <th>Action</th>
+                            <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                  <th>Address</th>
+                <th>Product Title</th>
+                 <th>Quantity</th>
+                  
+                <th>Total Price</th>
+                <th>Payment method</th>
+                <th>Payment Status</th>
+                <th>Delivery status</th>
+               <th>Order Date</th>
+                <th>Action</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
                         @forelse($orders as $order)
                             <tr>
-                                <td>{{ $order->id }}</td>
-                                <td>{{ $order->name ?? 'N/A' }}</td>
+                                <td>{{$order->id}}</td>
+                                <td>{{$order->name ?? 'N/A'}}</td>
+                                <td>{{$order->email?? 'N/A'}}</td>
+                               <td>{{$order->Phone?? 'N/A'}}</td>
+                               <td>{{$order->address?? 'N/A'}}</td>
+                                 
+                                 <td>
+               @foreach($order->products as $product)
+                   {{ $product->product_name}}<br>
+              
+           </td>
+        <td>
+    
+        {{ $product->pivot->quantity }}<br>
+           @endforeach 
+      </td>
+             
                                 <td>${{ number_format($order->total, 2) }}</td>
                                 <td>{{ ucfirst($order->payment_method) }}</td>
                                 <td>
@@ -56,9 +76,9 @@ order history page
                                 </td>
                                 <td>{{ $order->created_at->format('d M, Y h:i A') }}</td>
                                 <td>
-                                    <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-info">View</a>
-                                    <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" style="display:inline-block;">
+                                    <a href="{{ route('admin.order.show', $order->id) }}" class="btn btn-sm btn-info">View</a></br>
+                                    <a href="{{ route('admin.order.edit', $order->id) }}" class="btn btn-sm btn-warning">Edit</a></br>
+                                    <form action="{{ route('admin.order.destroy', $order->id) }}" method="POST" style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>

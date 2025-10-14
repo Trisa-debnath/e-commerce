@@ -43,4 +43,10 @@ class product extends Model
 public function images(){
     return $this->hasMany(Productimage::class);
 }
+
+public function orders()
+{
+    return $this->belongsToMany(Order::class, 'order_items')->withPivot('quantity');
+}
+
 }
