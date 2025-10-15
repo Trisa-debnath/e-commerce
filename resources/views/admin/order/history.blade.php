@@ -34,6 +34,7 @@ order history page
                 <th>Delivery status</th>
                <th>Order Date</th>
                 <th>Action</th>
+                <th>Print PDF</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
@@ -45,16 +46,17 @@ order history page
                                <td>{{$order->Phone?? 'N/A'}}</td>
                                <td>{{$order->address?? 'N/A'}}</td>
                                  
-                                 <td>
-               @foreach($order->products as $product)
-                   {{ $product->product_name}}<br>
-              
-           </td>
-        <td>
-    
+                              <td>
+    @foreach($order->products as $product)
+        {{ $product->product_name }}<br>
+    @endforeach
+</td>
+<td>
+    @foreach($order->products as $product)
         {{ $product->pivot->quantity }}<br>
-           @endforeach 
-      </td>
+    @endforeach
+</td>
+
              
                                 <td>${{ number_format($order->total, 2) }}</td>
                                 <td>{{ ucfirst($order->payment_method) }}</td>
@@ -76,14 +78,20 @@ order history page
                                 </td>
                                 <td>{{ $order->created_at->format('d M, Y h:i A') }}</td>
                                 <td>
-                                    <a href="{{ route('admin.order.show', $order->id) }}" class="btn btn-sm btn-info">View</a></br>
+                                    
                                     <a href="{{ route('admin.order.edit', $order->id) }}" class="btn btn-sm btn-warning">Edit</a></br>
                                     <form action="{{ route('admin.order.destroy', $order->id) }}" method="POST" style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                     </td>
+                                          <td>
+                                          <a href="{{ route('admin.order.Printpdf', $order->id) }}" class="btn btn-secondary">Print PDF</a>
+
+
+                                          </td>
                                     </form>
-                                </td>
+                               
                             </tr>
                         @empty
                             <tr>

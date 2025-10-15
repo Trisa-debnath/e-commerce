@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\product;
 use App\Models\Order;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
+
 class AdminMainController extends Controller
 {
     public  function index(){
@@ -55,23 +58,19 @@ $homepagesetting->save();
     $orders = Order::with('products')->latest()->paginate(10);
     return view('admin.order.history', compact('orders'));
     }
-      public function order_show($id)
-    {
-        $order = Order::findOrFail($id);
-        return view('admin.orders.show', compact('order'));
-    }
+     
 
       public function order_edit($id)
     {
         $order = Order::findOrFail($id);
-        return view('admin.orders.edit', compact('order'));
+        return view('admin.order.edit', compact('order'));
     }
 
-     public function rder_update(Request $request, $id)
+     public function order_update(Request $request, $id)
     {
         $order = Order::findOrFail($id);
         $order->update($request->all());
-        return redirect()->route('admin.orders.history')->with('success', 'Order updated successfully!');
+        return redirect()->route('admin.order.history')->with('success', 'Order updated successfully!');
     }
 
     public function order_destroy($id)
@@ -80,7 +79,11 @@ $homepagesetting->save();
         $order->delete();
         return back()->with('success', 'Order deleted successfully!');
     }
+   public function Print_pdf($id){
+    $order = Order::with('products')->findOrFail($id); 
+    $pdf = Pdf::loadView('admin.pdf', compact('order'));
+    return $pdf->download('order_details.pdf');
+}
 
-   
 
 }
