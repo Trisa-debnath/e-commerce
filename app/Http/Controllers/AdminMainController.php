@@ -54,10 +54,15 @@ $homepagesetting->save();
     }
 //order
 
-    public  function order_history(){
-    $orders = Order::with('products')->latest()->paginate(10);
-    return view('admin.order.history', compact('orders'));
-    }
+    public function order_history()
+{
+    
+    $products = Product::all();
+    $orders = Order::with('items.product')->latest()->paginate(10);
+    return view('admin.order.history', compact('orders', 'products'));
+}
+
+
      
 
       public function order_edit($id)
@@ -84,6 +89,20 @@ $homepagesetting->save();
     $pdf = Pdf::loadView('admin.pdf', compact('order'));
     return $pdf->download('order_details.pdf');
 }
+
+
+public function order_search(Request $request)
+{
+    $searchText = $request->search;
+ $orders = Order::with('items.product') 
+        ->where('name', 'LIKE', "%{$searchText}%")
+        ->orWhere('Phone', 'LIKE', "%{$searchText}%")
+        ->latest()
+        ->paginate(10);
+
+    return view('admin.order.history', compact('orders'));
+}
+
 
 
 }

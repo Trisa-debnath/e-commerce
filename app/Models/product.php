@@ -48,5 +48,11 @@ public function orders()
 {
     return $this->belongsToMany(Order::class, 'order_items')->withPivot('quantity');
 }
+public function orderItems()
+{
+    return $this->hasMany(OrderItem::class);
+}
+
+
 
 }

@@ -57,9 +57,12 @@ Route::controller(AdminMainController::class)->group(function () {
   Route::put('/order/update/{id}', 'order_update')->name('admin.order.update');
    Route::delete('/order/delete/{id}', 'order_destroy')->name('admin.order.destroy');
   
-  
 Route::get('/order/Print_pdf/{id}', 'Print_pdf')
      ->name('admin.order.Printpdf');
+     
+Route::get('/order/search','order_search')->name('admin.order.search');
+ 
+
 
 });
 

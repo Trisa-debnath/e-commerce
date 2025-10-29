@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use Stripe\Stripe;
 use Stripe\Charge;
+use App\Models\OrderItem;
 use Stripe\Checkout\Session as StripeSession;
 
 class HomePageController extends Controller
@@ -190,12 +191,23 @@ public function orderproceed(){
     } else {
         $order->payment_status = 'paid'; 
     }
-
-    $order->status = 'pending'; // delivery status
+    $order->status = 'pending'; 
     $order->save();
 
-       
-
+      //  Save each product from the cart into order_items table
+    foreach ($cart as $productId => $item) {
+        \App\Models\OrderItem::create([
+           
+ 'order_id'    => $order->id,
+        'product_id'  => $productId,
+        'product_name'=> $item['name'] ?? 'Unknown',
+        'quantity'    => $item['quantity'],
+        'price'       => $item['price'],
+        'subtotal'    => $item['price'] * $item['quantity'],
+        ]);
+    }
+ // Clear the cart
+    Session::forget('cart');
         return redirect()->route('order.success')->with('success', 'Order placed successfully!' . strtoupper($order->payment_method) . '!' ) ->with('total', $total); 
     }
 

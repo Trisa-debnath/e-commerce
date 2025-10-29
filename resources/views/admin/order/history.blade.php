@@ -6,7 +6,23 @@ order history page
 
 @section('admin_layout')
     <div class="container mt-4">
-    <h3 class="mb-4">Order History</h3>
+    <h3 class="mb-4">All Order History</h3>
+
+     <div class="input-group" style="max-width: 400px;">
+     <form action="{{ route('admin.order.search') }}" method="GET" class="mb-3">
+
+        @csrf
+
+       <input type="text" name="search" 
+               class="form-control border border-primary rounded-start" 
+               placeholder="Search by Name, Email or Product..." 
+               value="{{ request('search') }}">
+        <button class="btn btn-primary" type="submit">
+            <i class="bi bi-search"></i>
+        </button>
+</form>
+</div>
+
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -21,13 +37,12 @@ order history page
                 <table class="table table-bordered table-hover align-middle">
                     <thead class="table-dark text-center">
                         <tr>
+                            <th>ID</th>
                             <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                   <th>Address</th>
-                <th>Product Title</th>
-                 <th>Quantity</th>
-                  
+           
                 <th>Total Price</th>
                 <th>Payment method</th>
                 <th>Payment Status</th>
@@ -46,16 +61,7 @@ order history page
                                <td>{{$order->Phone?? 'N/A'}}</td>
                                <td>{{$order->address?? 'N/A'}}</td>
                                  
-                              <td>
-    @foreach($order->products as $product)
-        {{ $product->product_name }}<br>
-    @endforeach
-</td>
-<td>
-    @foreach($order->products as $product)
-        {{ $product->pivot->quantity }}<br>
-    @endforeach
-</td>
+
 
              
                                 <td>${{ number_format($order->total, 2) }}</td>
