@@ -6,14 +6,27 @@ use App\Models\HomePageSetting;
 use Illuminate\Http\Request;
 use App\Models\product;
 use App\Models\Order;
-
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class AdminMainController extends Controller
 {
     public  function index(){
-        return view('admin.admin');
+
+$total_product = product::all()->count();
+$total_order = Order::all()->count();
+$total_user = User::all()->count();
+$order = Order:: all();
+$total_revenue = 0;
+foreach($order as $order){
+    $total_revenue = $total_revenue + $order->total;
+}
+$total_deleverd = Order::where('status','=','completed')->get()->count();
+$total_pending = Order::where('status','=','pending')->get()->count();
+$total_cancelled = Order::where('status','=','Cancelled')->get()->count();
+         
+        return view('admin.admin',compact('total_product','total_order','total_user','total_revenue','total_deleverd','total_pending','total_cancelled'));
     }
 public  function seeting(){
     $products = Product::all();
