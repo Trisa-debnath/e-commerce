@@ -53,6 +53,11 @@ public function orderItems()
     return $this->hasMany(OrderItem::class);
 }
 
+public function comments()
+{
+    return $this->hasMany(Comment::class)->whereNull('parent_id')->with('replies');
+}
+
 
 
 }

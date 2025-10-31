@@ -163,11 +163,11 @@
 </div>
 
 
-{{-- 🔥 Discount & Featured Products Section --}}
+{{--  Discount & Featured Products Section --}}
 <section id="hero" class="py-5">
   <div class="container py-5">
     <h3 class="mb-4 text-center fw-bold text-uppercase text-primary">🔥 Discounted Products</h3>
-    {{-- 🔥 Discounted Product Section --}}
+    {{--  Discounted Product Section --}}
     <div class="card border-0 shadow-lg p-4">
       <div class="row align-items-center">
 

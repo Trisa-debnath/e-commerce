@@ -89,6 +89,9 @@
    <a href="{{ route('products.viewdetails', $product->id) }}"   style="background:#007bff; color:#fff; text-decoration:none; border-radius:8px; padding:7px 14px; font-size:14px; transition:0.3s;">
                 🔍 View Details
               </a>
+
+              @livewire('comment-section', ['product' => $product], key('comment-'.$product->id))
+
   </div>
            
   

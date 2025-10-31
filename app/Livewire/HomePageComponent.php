@@ -16,7 +16,7 @@ class HomePageComponent extends Component
     public function mount(): void
     {
         $this->categories = Category::all();
-          // 🔥 Read admin discount setting
+          //  Read admin discount setting
         $homepagesetting = \App\Models\HomePageSetting::first();
         $this->globalDiscount = $homepagesetting->discount_percent ?? 0;
     
