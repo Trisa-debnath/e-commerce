@@ -20,10 +20,14 @@ public function items()
     public function products()
 {
     return $this->belongsToMany(Product::class, 'order_items', 'order_id', 'product_id')
-    ->withPivot('quantity', 'price', 'product_name');
-
-    
+    ->withPivot('quantity', 'price', 'product_name');    
 }
+
+public function orderItems()
+{
+    return $this->hasMany(\App\Models\OrderItem::class);
+}
+
 
 }
 

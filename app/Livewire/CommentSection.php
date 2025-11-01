@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class CommentSection extends Component
@@ -22,6 +23,7 @@ class CommentSection extends Component
 
     public function addComment()
     {
+   
 
 $this->validate(['newComment' => 'required']);
 
@@ -29,13 +31,17 @@ $this->validate(['newComment' => 'required']);
         session()->flash('error', 'You must be logged in to comment.');
         return;
     }
+
+    // Check if user has purchased this product
+    if (!$this->hasPurchased()) {
+        session()->flash('error', 'You can only comment after purchasing this product.');
+        return;
+    }
         Comment::create([
             'product_id' => $this->product->id,
              'user_id' => Auth::id(),
             'content' => $this->newComment,
         ]);
-
-
         $this->newComment = '';
     }
 
@@ -52,7 +58,21 @@ $this->validate(['newComment' => 'required']);
 
     public function addReply()
     {
+    
         $this->validate(['replyComment' => 'required']);
+      
+
+    if 
+        (!Auth::check())
+        {
+        session()->flash('error', 'You must be logged in to reply.');
+        return;
+    }
+
+    if (!$this->hasPurchased()) {
+        session()->flash('error', 'You can only reply after purchasing this product.');
+        return;
+    }
 
         Comment::create([
             'product_id' => $this->product->id,
@@ -64,6 +84,54 @@ $this->validate(['newComment' => 'required']);
         $this->replyComment = '';
         $this->replyTo = null;
     }
+
+    public function deleteComment($commentId)
+{
+    $comment = Comment::find($commentId);
+
+    if (!$comment) {
+        return;
+    }
+
+ 
+    if (Auth::id() !== $comment->user_id) {
+        session()->flash('error', 'You can only delete your own comments.');
+        return;
+    }
+
+  
+    if ($comment->replies()->exists()) {
+        $comment->replies()->delete();
+    }
+
+    $comment->delete();
+
+    session()->flash('message', 'Comment deleted successfully!');
+}
+
+
+public function hasPurchased(): bool
+{
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    if (!$user) {
+        return false;
+    }
+
+    /** @var HasMany $orders */
+    $orders = $user->orders();
+
+    return $orders->whereHas('orderItems', function ($query) {
+        $query->where('product_id', $this->product->id);
+    })->exists();
+}
+
+
+
+
+
+
 
 
     public function render()
