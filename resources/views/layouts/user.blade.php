@@ -130,8 +130,7 @@
           <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         </ul>
 
-        <!-- Searchbar -->
-       @livewire('ProductSearchComponent')
+     
      
 <!-- Cart Dropdown Button -->
  <div class="ms-4">
@@ -172,6 +171,12 @@
   <!-- Main Content -->
   <main class="py-5">
     <div class="container">
+
+
+      {{-- 🔍 Product Search Section --}}
+<div class="container my-1">
+  @livewire('product-search-component')
+</div>
 
       <!-- Time Flash -->
       <div class="time-flash">

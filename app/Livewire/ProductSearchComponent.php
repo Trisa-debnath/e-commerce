@@ -3,18 +3,24 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\product;
+use App\Models\Product;
+
 class ProductSearchComponent extends Component
 {
-
- public $query = '';       
-    public $products = [];    
+    public $query = '';
+    public $products = [];
 
     public function search()
     {
-     
         if (!empty($this->query)) {
-            $this->products = Product::where('product_name', 'like', '%' . $this->query . '%')->get();
+            $searchText = $this->query;
+
+            $this->products = Product::with('category')
+                ->where('product_name', 'LIKE', '%' . $searchText . '%')
+                ->orWhereHas('category', function ($query) use ($searchText) {
+                    $query->where('category_name', 'LIKE', '%' . $searchText . '%');
+                })
+                ->get();
         } else {
             $this->products = [];
         }
@@ -22,6 +28,6 @@ class ProductSearchComponent extends Component
 
     public function render()
     {
-        return view('livewire.product-search-component');
+        return view('livewire.product-search-component'); // 👈 view return করবে
     }
 }
