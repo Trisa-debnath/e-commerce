@@ -15,6 +15,7 @@ class product extends Model
           'subcategory_id',
            'store_id',
             'regular_price',
+            'discount_percent',
              'discounted_price',
              'tax_rate',
              'stock_quantity',

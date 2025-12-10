@@ -17,6 +17,27 @@ use Stripe\Checkout\Session as StripeSession;
 
 class HomePageController extends Controller
 {
+
+    //  Common discount calculator function
+    private function applyDiscount($product, $percent)
+    {
+        if (!$product) return $product;
+
+        $reg = $product->regular_price ?? 0;
+
+        if ($reg > 0 && $percent > 0) {
+            $dis = intval($reg - (($percent / 100) * $reg)); 
+            $product->discounted_price = $dis;
+            $product->discount_percent = $percent;
+        } else {
+            $product->discounted_price = $reg; // show regular if no discount
+            $product->discount_percent = 0;
+        }
+
+        return $product;
+    }
+
+//main 
    public function index()
 {
    $homepagesetting = HomePageSetting::with([
@@ -24,27 +45,43 @@ class HomePageController extends Controller
     'featuredProduct1.images',
     'featuredProduct2.images'
 ])->first() ?? new HomePageSetting();
-   
+
+
  // Default Products
   $products = Product::with('images')->take(3)->get();
     $homepagesetting->discountedProduct = $homepagesetting->discountedProduct ?? $products[0] ?? null;
     $homepagesetting->featuredProduct1  = $homepagesetting->featuredProduct1  ?? $products[1] ?? null;
     $homepagesetting->featuredProduct2  = $homepagesetting->featuredProduct2  ?? $products[2] ?? null;
 
-  if ($homepagesetting->discountedProduct) {
+
+    // global discount percent
+        $globalPercent = $homepagesetting->discount_percent ?? 0;
+  // Apply discount globally
+        $homepagesetting->discountedProduct = $this->applyDiscount($homepagesetting->discountedProduct, $globalPercent);
+        $homepagesetting->featuredProduct1  = $this->applyDiscount($homepagesetting->featuredProduct1, $globalPercent);
+        $homepagesetting->featuredProduct2  = $this->applyDiscount($homepagesetting->featuredProduct2, $globalPercent);
+
+          // new arrivals
+        $products = Product::with('images')->get();
+        foreach ($products as $product) {
+            $product = $this->applyDiscount($product, $globalPercent);
+        }
+
+
+  /*if ($homepagesetting->discountedProduct) {
     $reg = $homepagesetting->discountedProduct->regular_price ?? 0;
     $percent = $homepagesetting->discount_percent ?? 0;
 
     if ($reg > 0 && $percent > 0) {
-        // calculate discount price
-        $dis = intval($reg - (($percent / 100) * $reg));
+         calculate discount price
+      $dis = intval($reg - (($percent / 100) * $reg));
         $homepagesetting->discountedProduct->discounted_price = $dis;
     } else {
         // if percent 0 , → discounted_price 0, only regular price show
         $homepagesetting->discountedProduct->discounted_price = 0;
         $homepagesetting->discount_percent = 0;
     }
-}
+}*/
 
 //for featureproduct1
 
@@ -86,16 +123,10 @@ $products = Product::with('images')->get();
 $globalPercent = $homepagesetting->discount_percent ?? 0;
 
 foreach ($products as $product) {
-    $reg = $product->regular_price ?? 0;
-    $percent = $globalPercent; // use global discount
+     $product->regular_price ;
+    
 
-    if ($reg > 0 && $percent > 0) {
-        $product->discounted_price = intval($reg - (($percent / 100) * $reg));
-        $product->discount_percent = $percent;
-    } else {
-        $product->discounted_price = 0;
-        $product->discount_percent = 0;
-    }
+   
 }
 
    
@@ -107,36 +138,26 @@ foreach ($products as $product) {
 
     return view('home.index', compact('homepagesetting', 'sliderProducts', 'products'));
 }
-
+//Category Page
 public function showCategoryProducts($category_name){
     $category = category::where('category_name',$category_name)->firstOrFail();
     $products = Product::with('images', 'category')
         ->where('category_id', $category->id)
         ->get();
 
-     // get global discount from home page settings
-    $homepagesetting = HomePageSetting::first();
-    $globalPercent = $homepagesetting->discount_percent ?? 0;
 
-    // calculate discount for each product
-    foreach ($products as $product) {
-        $reg = $product->regular_price ?? 0;
-        $percent = $globalPercent;
+        $globalPercent = HomePageSetting::first()->discount_percent ?? 0;
 
-        if ($reg > 0 && $percent > 0) {
-            $product->discounted_price = intval($reg - (($percent / 100) * $reg));
-            $product->discount_percent = $percent;
-        } else {
-            $product->discounted_price = 0;
-            $product->discount_percent = 0;
-        }
-    }
+        foreach ($products as $product) {
+            $product = $this->applyDiscount($product, $globalPercent);
+        }        
     return view('home.categories',compact('category','products'));
 }
 
 
 
 public function viewdetails($id){
+    /*
 // Product with images & category
     $product = Product::with('images', 'category')->findOrFail($id);
     // global discount
@@ -150,7 +171,15 @@ public function viewdetails($id){
     } else {
         $product->discounted_price = 0;
         $product->discount_percent = 0;
-    }
+    } */
+
+
+        
+        $product = Product::with('images', 'category')->findOrFail($id);
+        $homepagesetting = HomePageSetting::first();
+        $percent = $homepagesetting->discount_percent ?? 0;
+
+        $product = $this->applyDiscount($product, $percent);
 
   return view('home.viewdetails', compact('product'));   
 }

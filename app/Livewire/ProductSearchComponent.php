@@ -28,6 +28,6 @@ class ProductSearchComponent extends Component
 
     public function render()
     {
-        return view('livewire.product-search-component'); // 👈 view return করবে
+        return view('livewire.product-search-component'); 
     }
 }

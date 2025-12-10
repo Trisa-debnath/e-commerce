@@ -67,11 +67,15 @@ create product
                 <label for="regular_price" class="form-label fw-bold text-dark" >Product Regular Price</label>
                 <input type="number" name="regular_price" id="regular_price" class="form-control"  >
             </div> 
-              <!-- 	discounted_price -->
-<div class="mb-3" >
-                <label for="discounted_price" class="form-label fw-bold text-dark" >Product Discounted Price(if any)</label>
-                <input type="number" name="discounted_price" id="discounted_price" class="form-control"  >
-            </div>
+             <!-- 	discounted_percent -->
+<div class="mb-3">
+    <label for="discount_percent" class="form-label fw-bold text-dark">Discount Percent (if any)</label>
+    <input type="number" name="discount_percent" id="discount_percent" class="form-control" min="0" max="100">
+</div>
+
+
+            
+
               <!-- 	tax_rate  -->
               <div class="mb-3" >
                 <label for="tax_rate" class="form-label fw-bold text-dark" >Product Tax Rate</label>

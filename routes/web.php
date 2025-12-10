@@ -59,7 +59,7 @@ Route::controller(AdminMainController::class)->group(function () {
   
 Route::get('/order/Print_pdf/{id}', 'Print_pdf')
      ->name('admin.order.Printpdf');
-     
+     //admin order search
 Route::get('/order/search','order_search')->name('admin.order.search');
  
 
@@ -123,7 +123,10 @@ Route::middleware(['auth', 'verified','rolemanager:vendor'])->group(function () 
 
 Route::controller(SellerMainController::class)->group(function () {
     Route::get('/dashboard','index')->name('vendor');  
-     Route::get('/orderhistory','orderhistory')->name('seller.orderhistory'); 
+     Route::get('/orderhistory','orderhistory')->name('seller.orderhistory');
+     //seller order search
+     Route::get('/order/search','order_search')->name('seller.order.search');
+
 });
 Route::controller(SellerProductController::class)->group(function () {
     Route::get('/product/create','index')->name('vendor.product');  

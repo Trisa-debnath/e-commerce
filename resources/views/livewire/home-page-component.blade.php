@@ -1,5 +1,4 @@
-<section id="product">
-
+<section id="product" class="p-0 m-0">
 @if (session()->has('success'))
   <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
     {{ session('success') }}
@@ -8,8 +7,8 @@
 @endif
 
 
-  <div class="container py-5">
-    <div class="row">
+  <div class="container-fluid p-0 m-0">
+   <div class="row g-0 p-0 m-0">
 
       <!-- 🏷️ Title -->
       <div class="col-12 text-center mb-4">
@@ -19,6 +18,7 @@
 
       <!-- 🔘 Filter Buttons -->
       <div class="col-12 mb-5 text-center">
+        
         <div class="d-flex flex-wrap justify-content-center gap-2">
           <button wire:click="filterByCategory(null)" 
                   class="btn btn-outline-dark {{ $selectedCategory === null ? 'active' : '' }}">
@@ -39,7 +39,10 @@
       <!-- 🛍️ Products Grid -->
       @forelse ($products as $product)
 
-        <div class="col-lg-4 col-md-6 mb-4">
+        
+        
+<div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+
           <div class="card product_card h-100 shadow-sm">
             <img src="{{ asset('storage/'.($product->images[0]?->img_path ?? 'default.png')) }}" 
                  class="product_img" 
@@ -57,24 +60,16 @@
 
           {{-- Price & Discount --}}
           <span>
-                 @if ($product->discounted_price > 0)
-                 <small style="color:#dc3545;"> 
-                  {{ number_format($product->discount_percent) }}% OFF 
-                      </small></br>
-                      <p class="fw-bold fs-5">
-                 Price :
-               <span style="text-decoration:line-through; color:#0ea3c9; font-size:14px; margin:0;">
-                 ${{ $product->regular_price }}
-                </span>
-                 <span style="color:#6f42c1; font-size:16px; font-weight:600; margin-bottom:5px;">
-               ${{ $product->discounted_price }}  </span>
-                      </p>
+              Price:
+              @if($product->discounted_price)
+  <span class="text-success fw-bold">৳{{ $product->discounted_price }}</span>
+  <small>({{ $product->discount_percent }}% OFF)</small>
+  <span class="text-muted"><s>৳{{ $product->regular_price }}</s></span>
+@else
+  <span class="fw-bold">৳{{ $product->regular_price }}</span>
+@endif
+  
 
-         @else
-              <p style="color:#218838; font-size:16px; font-weight:600; margin:0;">
-                  Price: ${{ $product->regular_price }}
-                </p>
-               @endif
 </span>
 
 

@@ -42,14 +42,24 @@
       width: 100%;
       max-width: 400px;
     }
+    main {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+   padding-left: 0 !important;
+   margin-left: 0 !important;
+}
+
+
     .time-flash {
       background-color: #fff3cd;
-      padding: 15px;
-      border-left: 5px solid #ffc107;
-      font-size: 1.2rem;
-      font-weight: 500;
-      margin-bottom: 30px;
+       padding: 20px 30px; 
+      border-left: 6px solid #ffc107;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0px;
       text-align: center;
+       display: inline-block;
+  border-radius: 6px;
     }
     #footer {
       background-color: #343a40;
@@ -169,25 +179,37 @@
   </nav>
 
   <!-- Main Content -->
-  <main class="py-5">
-    <div class="container">
+ <main class="p-0 m-0 w-100">
 
+    <div class="container-fluid p-0 m-0">
 
-      {{-- 🔍 Product Search Section --}}
-<div class="container my-1">
-  @livewire('product-search-component')
-</div>
+<div class="container-fluid m-0 p-0">
 
-      <!-- Time Flash -->
-      <div class="time-flash">
+  <div class="row align-items-center">
+    
+    <!-- 🕒 Time Left -->
+    <div class="col-md-6 text-start">
+      <div class="time-flash d-inline-block w-auto">
         Time <span id="time">--:--:--</span>
       </div>
- 
+    </div>
+
+    <!-- 🔍 Search Right -->
+    <div class="col-md-6 text-end">
+      <div class="search-bar d-inline-block">
+        @livewire('product-search-component')
+      </div>
+    </div>
+
+  </div>
+</div>
+
+      
       
      <main>
         @yield('home')
         @livewire('HomeSellerflashComponent') 
-  @livewire('CartManagerComponent') 
+ 
         
       </main>
     </div>

@@ -1,6 +1,6 @@
 <div>
     <!-- Flash Sell Countdown Box -->
-<div class="time-flash mt-4" style="
+<div class="time-flash mt-4 w-100" style="
     background-color: #fff3cd;
     padding: 15px;
     border-left: 5px solid #ffc107;
@@ -9,7 +9,13 @@
     margin-bottom: 30px;
     text-align: center;
     border-radius: 5px;
+    width: 100%;
+    display: block;
+
 ">
+
+
+
   <span style="color:#856404; font-weight:bold;">⚡ Flash Sell Ending in:</span>
   <div id="flashCountdown" style="margin-top: 10px;">
     <span id="days" style="font-weight: bold; color:#343a40;">07</span> Days
@@ -17,7 +23,7 @@
     <span id="minutes" style="font-weight: bold; color:#343a40;">59</span> Minutes
     <span id="seconds" style="font-weight: bold; color:#343a40;">59</span> Seconds
   </div>
-</div>
+</>
 
 <!-- Countdown Script -->
 <script>

@@ -298,11 +298,15 @@ alt="{{ $homepagesetting->discountedProduct->product_name ?? 'Discount Product' 
 </div>
 
 {{-- 🆕 New Arrivals Section --}}
-<div class="container py-5">
+
+<div class="container-fluid p-0 m-0">
+
   <h3 class="mb-4 text-center fw-bold text-uppercase text-success">🛍️ New Arrivals</h3>
   <div class="row">
     @foreach ($products as $product)
-      <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex">
+      
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+
         <div class="w-100 shadow-lg rounded-3 overflow-hidden" 
              style="background:#fff; transition:0.3s ease; display:flex; flex-direction:column;">
           
@@ -321,24 +325,13 @@ alt="{{ $homepagesetting->discountedProduct->product_name ?? 'Discount Product' 
               <h2 style="font-size:20px; font-weight:600; color:#333; margin-bottom:8px;">
                 {{ $product->product_name }}
               </h2>
-             @if ($product->discounted_price > 0)
-                 <small style="color:#dc3545;"> 
-                  {{ number_format($product->discount_percent) }}% OFF 
-                      </small></br>
-                      <p class="fw-bold fs-5">
+            
                  Price :
-               <span style="text-decoration:line-through; color:#0ea3c9; font-size:14px; margin:0;">
+               <span style=" color:#0ea3c9; font-size:16px; font-weight:600; margin:0;">
                  ${{ $product->regular_price }}
                 </span>
-                 <span style="color:#6f42c1; font-size:16px; font-weight:600; margin-bottom:5px;">
-               ${{ $product->discounted_price }}  </span>
-                      </p>
-
-         @else
-              <p style="color:#218838; font-size:16px; font-weight:600; margin:0;">
-                  Price: ${{ $product->regular_price }}
-                </p>
-               @endif
+            
+               
 
             </div>
 

@@ -30,6 +30,10 @@ class SellerProductController extends Controller
         'sku' => 'nullable|string|max:100|unique:products,sku',
         'store_id' => 'required|exists:stores,id',
         'regular_price' => 'required|numeric|min:0',
+
+'discount_percent' => 'nullable|numeric|min:0|max:100',
+
+
         'discounted_price' => 'nullable|numeric|min:0|lte:regular_price',
         'tax_rate' => 'nullable|numeric|min:0',
         'stock_quantity' => 'required|integer|min:0',
@@ -40,6 +44,19 @@ class SellerProductController extends Controller
         'subcategory_id' => 'required|exists:subcategories,id',
           'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
+//discoun price calculate
+$discountedPrice = $request->regular_price;
+
+if ($request->discount_percent && $request->discount_percent > 0) {
+    $discountedPrice = intval($request->regular_price - ($request->regular_price * $request->discount_percent / 100));
+}
+ else {
+    $discountedPrice = null; // no discount, show only regular price
+}
+
+
+    
+  
 
         $product = Product::create([
             'product_name' => $request->product_name,
@@ -49,7 +66,10 @@ class SellerProductController extends Controller
 
                 'store_id' => $request->store_id,  
             'regular_price' => $request->regular_price,
-            'discounted_price' => $request->discounted_price,
+            
+             'discount_percent' => $request->discount_percent,
+
+            'discounted_price' => $discountedPrice,
             'tax_rate' => $request->tax_rate,
             'stock_quantity' => $request->stock_quantity,
             'slug' => $request->slug,
@@ -58,12 +78,13 @@ class SellerProductController extends Controller
             'category_id' => $request->category_id,
              'subcategory_id' => $request->subcategory_id,
 
+
         ]);
         
 
   if($request->hasFile('images')){
             foreach($request->file('images') as $image){
-                $imageName = $image->store('pdoduct_images','public');
+                $imageName = $image->store('product_images','public');
                 Productimage::create([
                     'product_id'=> $product->id,
                     'img_path' => $imageName,
