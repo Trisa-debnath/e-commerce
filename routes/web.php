@@ -62,9 +62,8 @@ Route::get('/order/Print_pdf/{id}', 'Print_pdf')
      //admin order search
 Route::get('/order/search','order_search')->name('admin.order.search');
  
-
-
 });
+
 
 Route::controller(CategoryController::class)->group(function () {
     Route::get('/category/create','index')->name('category.create');
@@ -95,8 +94,20 @@ Route::controller(ProductAttributeController::class)->group(function () {
 });
 
 Route::controller(ProductDiscountController::class)->group(function () {
+    //create
     Route::get('/discount/create','index')->name('discount.create');
+    // store discount
+    Route::post('/discount/store','store')->name('discount.store');
+    // manage page
     Route::get('/discount/manage','manage')->name('discount.manage');
+
+    Route::get('/edit/discount/{id}','edit')->name('discount.edit'); 
+    Route::post('/update/discount/{id}','update')->name('discount.update');
+    Route::get('/remove/discount/{id}','remove')->name('discount.remove');
+
+
+
+
 });
 
 Route::controller(MasterCategoryController::class)->group(function () {

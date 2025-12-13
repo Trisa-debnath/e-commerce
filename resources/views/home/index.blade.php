@@ -168,127 +168,40 @@
 
 {{--  Discount & Featured Products Section --}}
 <section id="hero" class="py-5">
-  <div class="container py-5">
-    <h3 class="mb-4 text-center fw-bold text-uppercase text-primary">🔥 Discounted Products</h3>
-    {{--  Discounted Product Section --}}
-    <div class="card border-0 shadow-lg p-4">
-      <div class="row align-items-center">
 
-        {{-- Left Side: Discount Text & Price & Add to Cart --}}
-        <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
-         
-           {{-- Discount % --}}
-@if($homepagesetting->discount_percent && $homepagesetting->discount_percent > 0)
-    <h2 class="display-3 fw-bold text-danger">
-        {{ number_format($homepagesetting->discount_percent) }}%
-    </h2>
-    <h1 class="fw-bold text-dark">
-        {{ $homepagesetting->discount_heading }}
-    </h1>
-      <h4 class="fw-bold text-dark">
-        {{ $homepagesetting->discountedProduct->product_name }}
-    </h4>
-@else
-    <h2 class="display-3 fw-bold text-danger">
-        0%
-    </h2>
-    <h4 class="fw-bold text-dark">
-        {{ $homepagesetting->discount_heading ?? 'No Discount Available' }}
-    </h4>
-@endif
-{{-- descount prize logic --}}
-@if($homepagesetting->discount_percent > 0 && $homepagesetting->discountedProduct->discounted_price > 0)
-    <h2 class="display-3 fw-bold text-danger">
-       {{ number_format($homepagesetting->discount_percent) }}% OFF   
-    </h2>
-    <h4 class="fw-bold text-dark">
-        {{ $homepagesetting->discount_heading }}
-    </h4>
-    <p class="fw-bold fs-5">
-        Price :
-        <span class="text-muted text-decoration-line-through">
-           $ {{ $homepagesetting->discountedProduct->regular_price }}
-        </span>
-        <span class="text-success fw-bold ms-2">
-            ${{ $homepagesetting->discountedProduct->discounted_price }}
-        </span>
+  <h3 class="mb-3 text-center fw-bold text-uppercase text-primary">🔥 Discounted Products</h3>
+<div class="d-flex overflow-auto gap-3 pb-2 px-3" style="scroll-behavior:smooth;">
+
+    @foreach($discountProducts as $product)
+    <div class="card shadow p-3" style="min-width:250px; flex:0 0 auto; border-radius:15px;">
+        {{-- Product Image --}}
+        <img src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->img_path) : asset('home_asset/img/default.png') }}" class="img-fluid mb-2" style="height:150px; object-fit:contain;">
+
+        {{-- Product Name --}}
+        <h5 class="fw-bold">{{ $product->product_name }}</h5>
+        Price : ${{ $product->regular_price }}
+
+        {{-- Discount --}}
+        @if($product->discount_percent > 0)
+    <span class="text-danger fw-bold">{{ $product->discount_percent }}% OFF</span>
+    <p>
+        <span class="text-decoration-line-through text-muted">${{ $product->regular_price }}</span>
+        <span class="fw-bold text-success ms-2">${{ $product->discounted_price }}</span>
     </p>
 @else
-    <h2 class="display-3 fw-bold text-danger">0%</h2>
-    <h4 class="fw-bold text-dark">No Discount Available</h4>
-    <p class="fw-bold fs-5 text-success">
-        ${{ $homepagesetting->discountedProduct->regular_price }}
-    </p>
+    <p>${{ $product->regular_price }}</p>
 @endif
 
-          {{-- Add to Cart Button --}}
- <div style="margin-top:15px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
-   {{-- 🛒 Livewire Add To Cart --}}
-  @livewire('cart-manager-component', ['product' => $homepagesetting->discountedProduct], key('discounted-'.$homepagesetting->discountedProduct->id))
- 
-   <a href="{{ route('products.viewdetails', $homepagesetting->discountedProduct->id) }}"   style="background:#007bff; color:#fff; text-decoration:none; border-radius:8px; padding:7px 14px; font-size:14px; transition:0.3s;">
-                🔍 View Details
-              </a>
-            </div>
-
-         
+        <div class="d-flex gap-2 flex-wrap justify-content-center">
+            @livewire('cart-manager-component', ['product' => $product], key('discount-'.$product->id))
+            <a href="{{ route('products.viewdetails', $product->id) }}" class="btn btn-primary btn-sm">View Details</a>        
         </div>
-
-        {{-- Right Side: Product Image --}}
-        <div class="col-md-6 text-center">
-          @if($homepagesetting->discountedProduct && $homepagesetting->discountedProduct->images->first())
-<img src="{{ asset('storage/' . $homepagesetting->discountedProduct->images->first()->img_path) }}"
-alt="{{ $homepagesetting->discountedProduct->product_name ?? 'Discount Product' }}"
-                 class="img-fluid rounded shadow"
-                  style="height:450px; width:auto; object-fit:contain;
-                 ">
-          @else
-            <img src="{{ asset('home_asset/img/default.png') }}"
-                 alt="Default Product"
-                 class="img-fluid rounded shadow"
-                 style="height:450px; width:auto; object-fit:contain;">
-          @endif
-        </div>
-      </div>
+        
     </div>
-
-    {{-- Right Side: Featured Products --}}
-        <div class="row g-4">
-@foreach(['featuredProduct1', 'featuredProduct2'] as $featured)
-    <div class="col-md-6">
-        <div class="card border-0 shadow h-100 text-center {{ $featured == 'featuredProduct1' ? 'bg-purple text-white' : 'bg-sky text-dark' }}">
-            <div class="card-body p-3 p-lg-4 d-flex flex-column align-items-center">
-  <img src="{{ optional(optional($homepagesetting->$featured)->images->first())->img_path 
-     ? asset('storage/' . $homepagesetting->$featured->images->first()->img_path)
-                              : asset('home_asset/img/default.png') }}"
-                     alt="{{ $homepagesetting->$featured->product_name ?? 'Default Product' }}"
-                     class="img-fluid rounded mb-3"  
-                         style="height:450px; width:auto; object-fit:contain;">
-
-                <h5 class="fw-bold">{{ $homepagesetting->$featured->product_name ?? 'No Product Name' }}</h5>
-                
-                <p class="mb-2">
-                 <span class="text-decoration-line-through" style="color: yellow;">
-                       $ {{ $homepagesetting->$featured->regular_price ?? 0 }}
-                    </span>
-                  
-                      <span class="ms-2 text-white">
-                       $ {{ $homepagesetting->$featured->discounted_price ?? $homepagesetting->$featured->regular_price ?? 0 }}
-                    </span>
-                </p>
-
-                {{-- Add to Cart Button --}}
-                
-            </div>
-        </div>
-    </div>
-@endforeach
+    @endforeach
 </div>
 
-
-
-    </div>
-  </div>
+ 
 </section>
 
 

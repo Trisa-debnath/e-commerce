@@ -18,258 +18,165 @@ use Stripe\Checkout\Session as StripeSession;
 class HomePageController extends Controller
 {
 
-    //  Common discount calculator function
-    private function applyDiscount($product, $percent)
-    {
-        if (!$product) return $product;
-
-        $reg = $product->regular_price ?? 0;
-
-        if ($reg > 0 && $percent > 0) {
-            $dis = intval($reg - (($percent / 100) * $reg)); 
-            $product->discounted_price = $dis;
-            $product->discount_percent = $percent;
-        } else {
-            $product->discounted_price = $reg; // show regular if no discount
-            $product->discount_percent = 0;
-        }
-
-        return $product;
-    }
-
-//main 
-   public function index()
+ // Common discount calculator function
+   private function applyDiscount($product)
 {
-   $homepagesetting = HomePageSetting::with([
-    'discountedProduct.images',
-    'featuredProduct1.images',
-    'featuredProduct2.images'
-])->first() ?? new HomePageSetting();
+    if (!$product) return $product;
 
+    $reg = $product->regular_price ?? 0;
 
- // Default Products
-  $products = Product::with('images')->take(3)->get();
-    $homepagesetting->discountedProduct = $homepagesetting->discountedProduct ?? $products[0] ?? null;
-    $homepagesetting->featuredProduct1  = $homepagesetting->featuredProduct1  ?? $products[1] ?? null;
-    $homepagesetting->featuredProduct2  = $homepagesetting->featuredProduct2  ?? $products[2] ?? null;
-
-
-    // global discount percent
-        $globalPercent = $homepagesetting->discount_percent ?? 0;
-  // Apply discount globally
-        $homepagesetting->discountedProduct = $this->applyDiscount($homepagesetting->discountedProduct, $globalPercent);
-        $homepagesetting->featuredProduct1  = $this->applyDiscount($homepagesetting->featuredProduct1, $globalPercent);
-        $homepagesetting->featuredProduct2  = $this->applyDiscount($homepagesetting->featuredProduct2, $globalPercent);
-
-          // new arrivals
-        $products = Product::with('images')->get();
-        foreach ($products as $product) {
-            $product = $this->applyDiscount($product, $globalPercent);
-        }
-
-
-  /*if ($homepagesetting->discountedProduct) {
-    $reg = $homepagesetting->discountedProduct->regular_price ?? 0;
-    $percent = $homepagesetting->discount_percent ?? 0;
+    // Admin-defined discount only
+    $percent = $product->discount_percent ?? 0; 
 
     if ($reg > 0 && $percent > 0) {
-         calculate discount price
-      $dis = intval($reg - (($percent / 100) * $reg));
-        $homepagesetting->discountedProduct->discounted_price = $dis;
-    } else {
-        // if percent 0 , → discounted_price 0, only regular price show
-        $homepagesetting->discountedProduct->discounted_price = 0;
-        $homepagesetting->discount_percent = 0;
-    }
-}*/
-
-//for featureproduct1
-
-  if ($homepagesetting->featuredProduct1) {
-    $reg = $homepagesetting->featuredProduct1->regular_price ?? 0;
-    $percent = $homepagesetting->discount_percent ?? 0;
-
-    if ($reg > 0 && $percent > 0) {
-        // calculate discount price
         $dis = intval($reg - (($percent / 100) * $reg));
-        $homepagesetting->featuredProduct1->discounted_price = $dis;
+        $product->discounted_price = $dis;
+        $product->discount_percent = $percent;
     } else {
-        // if percent 0 , → discounted_price 0, only regular price show
-        $homepagesetting->featuredProduct1->discounted_price = 0;
-        $homepagesetting->discount_percent = 0;
+        $product->discounted_price = $reg; 
+        $product->discount_percent = 0;
     }
+
+    return $product;
 }
 
-//for featureproduct2
 
-  if ($homepagesetting->featuredProduct2) {
-    $reg = $homepagesetting->featuredProduct2->regular_price ?? 0;
-    $percent = $homepagesetting->discount_percent ?? 0;
-
-    if ($reg > 0 && $percent > 0) {
-        // calculate discount price
-        $dis = intval($reg - (($percent / 100) * $reg));
-        $homepagesetting->featuredProduct2->discounted_price = $dis;
-    } else {
-        // if percent 0 , → discounted_price 0, only regular price show
-        $homepagesetting->featuredProduct2->discounted_price = 0;
-        $homepagesetting->discount_percent = 0;
-    }
-}
-
-    //for new arrivals
-$products = Product::with('images')->get();
-
-$globalPercent = $homepagesetting->discount_percent ?? 0;
-
-foreach ($products as $product) {
-     $product->regular_price ;
+    // Home Page
+    public function index()
+{
     
+    $homepagesetting = HomePageSetting::first() ?? new HomePageSetting();
 
-   
+    // Slider 
+    $sliderProducts = Product::with('images')->latest()->take(5)->get();
+
+    // Discount Products 
+    $discountProducts = Product::with('images')
+        ->whereNotNull('discount_percent')
+        ->get()
+        ->map(function($product) {
+            return $this->applyDiscount($product);
+        });
+
+    
+    $products = Product::with('images')->latest()->get()
+        ->map(function($product) {
+            return $this->applyDiscount($product);
+        });
+
+    return view('home.index', compact('homepagesetting', 'sliderProducts', 'products', 'discountProducts'));
 }
 
-   
-//for slider
-   $sliderProducts = Product::with('images')
-    ->latest()
-    ->take(5)
-    ->get();
 
-    return view('home.index', compact('homepagesetting', 'sliderProducts', 'products'));
-}
-//Category Page
-public function showCategoryProducts($category_name){
-    $category = category::where('category_name',$category_name)->firstOrFail();
-    $products = Product::with('images', 'category')
-        ->where('category_id', $category->id)
-        ->get();
-
+    // Category Page
+    public function showCategoryProducts($category_name)
+    {
+        $category = Category::where('category_name', $category_name)->firstOrFail();
+        $products = Product::with('images', 'category')
+            ->where('category_id', $category->id)
+            ->get();
 
         $globalPercent = HomePageSetting::first()->discount_percent ?? 0;
 
-        foreach ($products as $product) {
-            $product = $this->applyDiscount($product, $globalPercent);
-        }        
-    return view('home.categories',compact('category','products'));
-}
+        $products = $products->map(function($product) use ($globalPercent) {
+            return $this->applyDiscount($product, $globalPercent);
+        });
 
+        return view('home.categories', compact('category', 'products'));
+    }
 
-
-public function viewdetails($id){
-    /*
-// Product with images & category
-    $product = Product::with('images', 'category')->findOrFail($id);
-    // global discount
-    $homepagesetting = HomePageSetting::first();
-    $percent = $homepagesetting->discount_percent ?? 0;
-    $reg = $product->regular_price ?? 0;
-
-    if ($reg > 0 && $percent > 0) {
-        $product->discounted_price = intval($reg - (($percent / 100) * $reg));
-        $product->discount_percent = $percent;
-    } else {
-        $product->discounted_price = 0;
-        $product->discount_percent = 0;
-    } */
-
-
-        
+    // Product Details
+    public function viewdetails($id)
+    {
         $product = Product::with('images', 'category')->findOrFail($id);
         $homepagesetting = HomePageSetting::first();
         $percent = $homepagesetting->discount_percent ?? 0;
 
         $product = $this->applyDiscount($product, $percent);
 
-  return view('home.viewdetails', compact('product'));   
-}
+        return view('home.viewdetails', compact('product'));
+    }
 
-
-      
- 
-public function orderproceed(){
-      $cart = Session::get('cart', []);
-
-    $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
-
-    return view('home.orderproceed', compact('cart', 'total'));
-
-}
-
-         public function orderstore(Request $request)
+    // Order Proceed
+    public function orderproceed()
     {
         $cart = Session::get('cart', []);
-        if(empty($cart)) {
+        $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+
+        return view('home.orderproceed', compact('cart', 'total'));
+    }
+
+    // Order Store
+    public function orderstore(Request $request)
+    {
+        $cart = Session::get('cart', []);
+        if (empty($cart)) {
             return redirect()->back()->with('error', 'Cart is empty!');
         }
 
-         $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
-          Session::forget('cart');
-         $order = new Order();
-    $order->name = $request->name;
-    $order->phone = $request->phone;
-    $order->email = $request->email;
-    $order->address = $request->address ?? null;
-    $order->user_id = Auth::id();
-  
-    $order->total = $total;
-    $order->payment_method = $request->payment_method;
+        $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
 
-     if ($request->payment_method === 'cod') {
-        $order->payment_status = 'pending'; 
-    } else {
-        $order->payment_status = 'paid'; 
-    }
-    $order->status = 'pending'; 
-    $order->save();
+        $order = new Order();
+        $order->name = $request->name;
+        $order->phone = $request->phone;
+        $order->email = $request->email;
+        $order->address = $request->address ?? null;
+        $order->user_id = Auth::id();
+        $order->total = $total;
+        $order->payment_method = $request->payment_method;
+        $order->payment_status = $request->payment_method === 'cod' ? 'pending' : 'paid';
+        $order->status = 'pending';
+        $order->save();
 
-      //  Save each product from the cart into order_items table
-    foreach ($cart as $productId => $item) {
-        \App\Models\OrderItem::create([
-           
- 'order_id'    => $order->id,
-        'product_id'  => $productId,
-        'product_name'=> $item['name'] ?? 'Unknown',
-        'quantity'    => $item['quantity'],
-        'price'       => $item['price'],
-        'subtotal'    => $item['price'] * $item['quantity'],
-        ]);
-    }
- // Clear the cart
-    Session::forget('cart');
-        return redirect()->route('order.success')->with('success', 'Order placed successfully!' . strtoupper($order->payment_method) . '!' ) ->with('total', $total); 
+        // Save order items
+        foreach ($cart as $productId => $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $productId,
+                'product_name' => $item['name'] ?? 'Unknown',
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+                'subtotal' => $item['price'] * $item['quantity'],
+            ]);
+        }
+
+        Session::forget('cart');
+
+        return redirect()->route('order.success')
+            ->with('success', 'Order placed successfully! ' . strtoupper($order->payment_method))
+            ->with('total', $total);
     }
 
-    
-   public function stripe($total)
-{
-    return view('home.stripe', compact('total'));
-}
+    // Stripe payment page
+    public function stripe($total)
+    {
+        return view('home.stripe', compact('total'));
+    }
 
-public function stripePost(Request $request)
-{
-    $request->validate([
-        'total' => 'required|numeric|min:1',
-        'stripeToken' => 'required',
-    ]);
-
-    try {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-
-        Charge::create([
-            "amount" => $request->total * 100, // in cents
-            "currency" => "usd",
-            "source" => $request->stripeToken,
-            "description" => "Payment for Cart Order",
+    // Stripe payment post
+    public function stripePost(Request $request)
+    {
+        $request->validate([
+            'total' => 'required|numeric|min:1',
+            'stripeToken' => 'required',
         ]);
 
-        Session::flash('success', 'Payment successful!');
-    } catch (\Exception $e) {
-        Session::flash('error', $e->getMessage());
+        try {
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+
+            Charge::create([
+                "amount" => $request->total * 100, // in cents
+                "currency" => "usd",
+                "source" => $request->stripeToken,
+                "description" => "Payment for Cart Order",
+            ]);
+
+            Session::flash('success', 'Payment successful!');
+        } catch (\Exception $e) {
+            Session::flash('error', $e->getMessage());
+        }
+
+        return redirect()->back();
     }
 
-    return redirect()->back();
-}
-
-
-}
+ }
