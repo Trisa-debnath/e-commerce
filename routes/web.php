@@ -13,6 +13,8 @@ use App\Http\Controllers\MasterCategoryController;
 use App\Http\Controllers\MasterSubcategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\ReviewController;
+
 
 
 //use App\Livewire\HomePageComponent;
@@ -152,9 +154,7 @@ Route::controller(SellerStoreController::class)->group(function () {
   
     Route::delete('/delete/store/{id}', 'deletestore')->name('delete.store'); 
     Route::post('/update/store/{id}','upstore')->name('update.store');
-   
-      
-      
+        
 });
 }); 
 });
@@ -184,5 +184,19 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::controller(ReviewController::class)->group(function () {
+    Route::post('/product/review/store','store')
+     ->name('review.store');
+     
+     Route::get('/review/approve/{id}','approve')
+     ->name('admin.review.approve');
+
+Route::get('/review/reject/{id}','reject')
+     ->name('admin.review.reject');
+
+});
+
+
 
 require __DIR__.'/auth.php';

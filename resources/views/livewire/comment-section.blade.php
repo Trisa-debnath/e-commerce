@@ -3,10 +3,16 @@
 
         {{-- Flash messages --}}
         @if (session()->has('message'))
-            <div class="alert alert-success mt-2">{{ session('message') }}</div>
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                {{ session('message') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         @endif
         @if (session()->has('error'))
-            <div class="alert alert-warning mt-2">{{ session('error') }}</div>
+            <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         @endif
 
         {{-- Comments header --}}
@@ -25,7 +31,7 @@
         @auth
             @if($this->hasPurchased())
                 <div class="mb-3">
-                    <textarea wire:model="newComment" class="form-control" rows="1" placeholder="Write a comment..."></textarea>
+                    <textarea wire:model="newComment" class="form-control" rows="2" placeholder="Write a comment..."></textarea>
                     <button wire:click="addComment" class="btn btn-primary btn-sm mt-2">Post</button>
                 </div>
             @else
@@ -38,41 +44,47 @@
         {{-- Display comments --}}
         @if ($showComments)
             @foreach ($comments as $comment)
-                <div class="border rounded p-2 mb-2">
-                    <strong>{{ $comment->user->name ?? 'Anonymous' }}</strong>:
-                    <p>{{ $comment->content }}</p>
+                <div class="border rounded p-3 mb-3 bg-light">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <strong>{{ $comment->user->name ?? 'Anonymous' }}</strong>
+                        @if(auth()->id() === $comment->user_id)
+                            <button class="btn btn-sm btn-outline-danger" 
+                                    wire:click="deleteComment({{ $comment->id }})">Delete</button>
+                        @endif
+                    </div>
 
-                    {{-- Reply button for purchased users --}}
+                    <p class="mt-2">{{ $comment->content }}</p>
+
                     @auth
                         @if($this->hasPurchased())
-                            <button class="btn btn-link p-0 text-primary" wire:click="setReply({{ $comment->id }})">Reply</button>
+                            <button class="btn btn-sm btn-outline-primary mb-2" 
+                                    wire:click="setReply({{ $comment->id }})">Reply</button>
                         @endif
                     @endauth
 
-                    {{-- Delete button --}}
-                    @if(auth()->id() === $comment->user_id)
-                        <button class="btn btn-link text-danger p-0 ms-2" wire:click="deleteComment({{ $comment->id }})">🗑</button>
+                    @if ($replyTo === $comment->id && $this->hasPurchased())
+                        <div class="mt-2 ms-3">
+                            <textarea wire:model="replyComment" 
+                                      class="form-control form-control-sm" 
+                                      rows="2" 
+                                      placeholder="Write a reply..."></textarea>
+                            <button wire:click="addReply" class="btn btn-success btn-sm mt-1">Send Reply</button>
+                        </div>
                     @endif
 
                     {{-- Replies --}}
                     @foreach ($comment->replies as $reply)
-                        <div class="ms-4 border-start ps-2 mt-2">
-                            <strong>{{ $reply->user->name ?? 'Anonymous' }}</strong>:
-                            <p>{{ $reply->content }}</p>
-
-                            @if(auth()->id() === $reply->user_id)
-                                <button class="btn btn-link text-danger p-0 ms-2" wire:click="deleteComment({{ $reply->id }})">🗑</button>
-                            @endif
+                        <div class="ms-4 mt-2 p-2 border-start border-2 border-secondary bg-white rounded">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong>{{ $reply->user->name ?? 'Anonymous' }}</strong>
+                                @if(auth()->id() === $reply->user_id)
+                                    <button class="btn btn-sm btn-outline-danger" 
+                                            wire:click="deleteComment({{ $reply->id }})">Delete</button>
+                                @endif
+                            </div>
+                            <p class="mt-1 mb-0">{{ $reply->content }}</p>
                         </div>
                     @endforeach
-
-                    {{-- Reply textarea --}}
-                    @if ($replyTo === $comment->id && $this->hasPurchased())
-                        <div class="ms-3 mt-2">
-                            <textarea wire:model="replyComment" class="form-control form-control-sm" rows="1" placeholder="Write a reply..."></textarea>
-                            <button wire:click="addReply" class="btn btn-success btn-sm mt-1">Send Reply</button>
-                        </div>
-                    @endif
 
                 </div>
             @endforeach

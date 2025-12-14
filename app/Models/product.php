@@ -59,6 +59,13 @@ public function comments()
     return $this->hasMany(Comment::class)->whereNull('parent_id')->with('replies');
 }
 
+public function reviews()
+{
+    return $this->hasMany(Review::class)
+                ->where('status','approved');
+}
+
+
 
 
 }

@@ -183,29 +183,17 @@
 
     <div class="container-fluid p-0 m-0">
 
-<div class="container-fluid m-0 p-0">
-
-  <div class="row align-items-center">
-    
-    <!-- 🕒 Time Left -->
-    <div class="col-md-6 text-start">
-      <div class="time-flash d-inline-block w-auto">
-        Time <span id="time">--:--:--</span>
-      </div>
+<!-- 🕒 Time -->
+    <div class="time-flash px-3 py-2" style="font-size: 1rem;">
+      Time: <span id="time">--:--:--</span>
     </div>
 
-    <!-- 🔍 Search Right -->
-    <div class="col-md-6 text-end">
-      <div class="search-bar d-inline-block">
-        @livewire('product-search-component')
-      </div>
+    <!-- 🔍 Search Full Width -->
+    <div class="w-100" style="width: 100%;">
+      @livewire('product-search-component')
     </div>
 
-  </div>
-</div>
-
-      
-      
+  
      <main>
         @yield('home')
         @livewire('HomeSellerflashComponent') 

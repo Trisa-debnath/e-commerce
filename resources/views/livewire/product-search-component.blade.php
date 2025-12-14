@@ -1,5 +1,6 @@
-<div class="container my-4">
 
+<div class="container-fluid my-4">
+    
     <!-- 🔍 Searchbar -->
     <form class="d-flex search-bar mb-1" wire:submit.prevent="search">
         <input 
@@ -16,18 +17,18 @@
 
     <!-- 🧾 Search results -->
     @if(!empty($products))
-        <div class="row">
+       
             <h5 class="mb-3 text-center">🔍 Search Results</h5>
-
+           
+             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4">
             @forelse($products as $product)
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card shadow-sm h-100">
-                        <img 
-                            src="{{ asset('storage/'.($product->images[0]?->img_path ?? 'default.png')) }}" 
+                   <div class="col">
+                    
+                        <div class="card shadow-sm h-100 w-100">
+ <img src="{{ asset('storage/'.($product->images[0]?->img_path ?? 'default.png')) }}" 
                             class="card-img-top" 
-                            style="height: 220px; object-fit: cover;"
-                            alt="{{ $product->product_name }}"
-                        >
+                            style="height: 190px; object-fit: cover;"
+                            alt="{{ $product->product_name }}" >
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $product->product_name }}</h5>
                             <p class="text-muted mb-1">

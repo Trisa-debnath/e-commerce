@@ -53,6 +53,23 @@
       <div class="mt-4">
         @livewire('cart-manager-component', ['product' => $product], key($product->id))
       </div>
+
+{{--  Product Reviews --}}
+<div class="mt-5">
+    <h4 class="fw-bold mb-3">Customer Reviews</h4>
+
+    @forelse($product->reviews as $review)
+        <div class="border rounded p-3 mb-3">
+             {{ $review->rating }}/5 <br>
+            {{ $review->review }} <br>
+            <small>By {{ $review->user->name ?? 'Guest' }}</small>
+        </div>
+    @empty
+        <p>No reviews yet.</p>
+    @endforelse
+</div>
+
+
     </div>
   </div>
 </div>

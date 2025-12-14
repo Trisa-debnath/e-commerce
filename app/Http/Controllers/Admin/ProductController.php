@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Review;
  
 
 class ProductController extends Controller
@@ -40,6 +41,15 @@ class ProductController extends Controller
     // Product review manage page
     public function review_manage()
     {
-        return view('admin.product.manageproductreview');
+
+
+    $reviews = Review::with('product','user')
+                     ->latest()
+                     ->paginate(10);
+
+   
+
+
+        return view('admin.product.manageproductreview', compact('reviews'));
     }
 }
