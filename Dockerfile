@@ -1,7 +1,6 @@
-# ---- Base PHP Image ----
 FROM php:8.2-fpm
 
-# ---- System Dependencies ----
+# System dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -11,33 +10,42 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     nodejs \
-    npm
+    npm \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# ---- PHP Extensions ----
-RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd
+# PHP extensions (MySQL only)
+RUN docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd
 
-# ---- Install Composer ----
+# Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# ---- Set Working Directory ----
+# App directory
 WORKDIR /var/www
 
-# ---- Copy Files ----
+# Copy project
 COPY . .
 
-# ---- Install PHP Dependencies ----
+# Install PHP deps
 RUN composer install --no-dev --optimize-autoloader
 
-# ---- Install Node & Build Assets ----
+# Build frontend
 RUN npm install && npm run build
 
-# ---- Permissions ----
+# Permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# ---- Expose Port ----
+# Expose port for Render
 EXPOSE 10000
 
-# ---- Start Laravel ----
+# Generate key safely
 RUN php artisan key:generate || true
 
+# Start app
 CMD php artisan serve --host=0.0.0.0 --port=10000
