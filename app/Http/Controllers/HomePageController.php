@@ -19,7 +19,7 @@ class HomePageController extends Controller
 {
 
  // Common discount calculator function
-   private function applyDiscount($product)
+ /*  private function applyDiscount($product)
 {
     if (!$product) return $product;
 
@@ -38,7 +38,7 @@ class HomePageController extends Controller
     }
 
     return $product;
-}
+}*/
 
 
     // Home Page
@@ -52,9 +52,11 @@ class HomePageController extends Controller
 
     // Discount Products 
     $discountProducts = Product::with('images')
-        ->whereNotNull('discount_percent')
-        ->get()
-        ->map(function($product) {
+        ->where('discount_percent', '>', 0)
+        ->get();
+
+
+       /* ->map(function($product) {
             return $this->applyDiscount($product);
         });
 
@@ -62,7 +64,10 @@ class HomePageController extends Controller
     $products = Product::with('images')->latest()->get()
         ->map(function($product) {
             return $this->applyDiscount($product);
-        });
+        });*/
+
+        $products = Product::with('images')->latest()->get();
+
 
     return view('home.index', compact('homepagesetting', 'sliderProducts', 'products', 'discountProducts'));
 }
@@ -73,29 +78,32 @@ class HomePageController extends Controller
     {
         $category = Category::where('category_name', $category_name)->firstOrFail();
         $products = Product::with('images', 'category')
-            ->where('category_id', $category->id)
-            ->get();
-
-        $globalPercent = HomePageSetting::first()->discount_percent ?? 0;
+            ->where('category_id', $category->id) ->get();
+       /* $globalPercent = HomePageSetting::first()->discount_percent ?? 0;
 
         $products = $products->map(function($product) use ($globalPercent) {
             return $this->applyDiscount($product, $globalPercent);
-        });
-
+        });*/
+      
         return view('home.categories', compact('category', 'products'));
     }
 
     // Product Details
-    public function viewdetails($id)
+   /* public function viewdetails($id)
     {
         $product = Product::with('images', 'category')->findOrFail($id);
         $homepagesetting = HomePageSetting::first();
-        $percent = $homepagesetting->discount_percent ?? 0;
-
-        $product = $this->applyDiscount($product, $percent);
-
+       // $percent = $homepagesetting->discount_percent ?? 0;
+       // $product = $this->applyDiscount($product, $percent);
         return view('home.viewdetails', compact('product'));
-    }
+    }*/
+
+    public function viewdetails($id)
+{
+    $product = Product::with('images', 'category')->findOrFail($id);
+    return view('home.viewdetails', compact('product'));
+}
+
 
     // Order Proceed
     public function orderproceed()

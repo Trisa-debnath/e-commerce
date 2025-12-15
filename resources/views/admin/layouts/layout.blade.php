@@ -10,7 +10,7 @@
     <meta name="keywords" content="adminkit, bootstrap, admin, dashboard, template">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="shortcut icon" href="{{ asset('admin_asset/img/icons/icon-48x48.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('admin_asset/img/icons/logo.png')}}" />
     <link rel="canonical" href="https://demo-basic.adminkit.io/pages-blank.html" />
 
     <title>@yield('admin_page_title')</title>
@@ -27,10 +27,10 @@
         <!-- Sidebar -->
         <nav id="sidebar" class="sidebar js-sidebar">
             <div class="sidebar-content js-simplebar">
-                <a class="sidebar-brand" href="{{ route('admin') }}">
-                    <span class="align-middle">Admin</span>
-                </a>
-
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin') }}">
+    <img src="{{ asset('admin_asset/img/icons/logo.png') }}" style="height:30px;" class="me-2">
+    <span class="fw-bold">Admin Panel</span>
+</a>
                 <ul class="sidebar-nav">
                     <li class="sidebar-header">Main</li>
                     <li class="sidebar-item {{ request()->routeIs('admin') ? 'active' : '' }}">
@@ -143,7 +143,7 @@
                         @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                                <img src="{{ asset('admin_asset/img/avatars/avatar.jpg') }}" class="avatar img-fluid rounded me-1" alt="{{ auth()->user()->name }}" />
+ <img src="{{ asset('admin_asset/img/icons/logo.png') }}" class="avatar img-fluid rounded me-1" alt="{{ auth()->user()->name }}" />
                                 <span class="text-dark">{{ auth()->user()->name }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -178,7 +178,7 @@
                     <div class="row text-muted">
                         <div class="col-6 text-start">
                             <p class="mb-0">
-                                <a class="text-muted" href="#" target="_blank"><strong>Trisha's Shop</strong></a> - Trish's Shop Admin site
+                                <a class="text-muted" href="#" target="_blank">  © {{ date('Y') }} <strong>Trisha's Shop</strong></a> - Trish's Shop Admin site
                             </p>
                         </div>
                         <div class="col-6 text-end">
@@ -188,6 +188,7 @@
                                 <li class="list-inline-item"><a class="text-muted" href="#">Privacy</a></li>
                                 <li class="list-inline-item"><a class="text-muted" href="#">Terms</a></li>
                             </ul>
+                             Developed by <strong>Trisa</strong>
                         </div>
                     </div>
                 </div>

@@ -13,8 +13,6 @@
      class="img-fluid rounded shadow"
      style="max-width: 100%; height: auto; width:600px;"
  alt="{{ $product->product_name }}">
-
-
       @else
         <img src="{{ asset('storage/default.png') }}" 
              class="img-fluid rounded shadow" 
@@ -33,7 +31,7 @@
    <h6 class="text-black">Product Stock Quantity : {{ $product->stock_quantity }}</h6>
     
       {{-- Price & Discount --}}
-      @if ($product->discounted_price > 0)
+      @if($product->discounted_price > 0)
         <p>
           <small class="text-danger">{{ $product->discount_percent }}% OFF</small><br>
           <span style="text-decoration:line-through; color:#0ea3c9;">

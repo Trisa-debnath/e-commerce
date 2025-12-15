@@ -10,7 +10,7 @@
 	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
 	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+	<link rel="shortcut icon" href="{{ asset('admin_asset/img/icons/logo.png')}}"/>
 
 	<link rel="canonical" href="https://demo-basic.adminkit.io/pages-blank.html" />
 
@@ -26,11 +26,10 @@
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
-				<a class="sidebar-brand" href="index.html">
-          <span class="align-middle">Seller
-          </span>
-        </a>
-
+				<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <img src="{{ asset('admin_asset/img/icons/logo.png') }}" style="height:30px;" class="me-2">
+    <span class="fw-bold">Seller Panel</span>
+</a>
 				<ul class="sidebar-nav">
 					<li class="sidebar-header">
 						Main
@@ -38,7 +37,7 @@
 
 					<li class="sidebar-item {{request()->routeIs('vendor')?'active':''}}">
 						<a class="sidebar-link" href="{{route('vendor')}}">
-              <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+              <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Seller Dashboard</span>
             </a>
 					</li>
 							<li class="sidebar-item {{request()->routeIs('seller.orderhistory')?'active':''}}">
@@ -75,11 +74,6 @@
               <i class="align-middle" data-feather="list"></i> <span class="align-middle">Manage</span>
             </a>
 					</li>
-
-
-
-
-
 					
 				</ul>
 
@@ -250,7 +244,8 @@
                         @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                                <img src="{{ asset('admin_asset/img/avatars/avatar.jpg') }}" class="avatar img-fluid rounded me-1" alt="{{ auth()->user()->name }}" />
+                                <img src="{{ asset('admin_asset/img/icons/logo.png') }}"
+								 class="avatar img-fluid rounded me-1" alt="{{ auth()->user()->name }}" />
                                 <span class="text-dark">{{ auth()->user()->name }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -290,7 +285,7 @@
 					<div class="row text-muted">
 						<div class="col-6 text-start">
 							<p class="mb-0">
-								<a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>AdminKit</strong></a> - <a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>Bootstrap Admin Template</strong></a>								&copy;
+								<a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>Trisha's Shop</strong></a> - <a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>Developed by Trisa</strong></a>								&copy;
 							</p>
 						</div>
 						<div class="col-6 text-end">

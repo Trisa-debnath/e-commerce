@@ -20,7 +20,7 @@
               </a></p>
                         {{-- Price & Discount --}}
               <p class="pcc_price">
-                 @if ($product->discounted_price > 0)
+                 @if($product->discounted_price > 0)
                  <small style="color:#dc3545;"> 
                   {{ number_format($product->discount_percent) }}% OFF 
                       </small></br>

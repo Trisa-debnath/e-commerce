@@ -61,21 +61,16 @@
           {{-- Price & Discount --}}
           <span>
               Price:
-              @if($product->discounted_price)
+              @if($product->discount_percent > 0)
   <span class="text-success fw-bold">৳{{ $product->discounted_price }}</span>
   <small>({{ $product->discount_percent }}% OFF)</small>
   <span class="text-muted"><s>৳{{ $product->regular_price }}</s></span>
 @else
   <span class="fw-bold">৳{{ $product->regular_price }}</span>
 @endif
-  
-
 </span>
 
-
-            
-
-          
+         
  {{-- Buttons --}}
  <div style="margin-top:15px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
  <!-- 🧠 This is add to cart component location -->

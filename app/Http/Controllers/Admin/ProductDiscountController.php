@@ -37,7 +37,9 @@ class ProductDiscountController extends Controller
 
     public function manage()
     {
-        $products = Product::whereNotNull('discount_percent')->get();
+      //  $products = Product::whereNotNull('discount_percent')->get();
+          $products = Product::where('discount_percent', '>', 0)->get();
+
         return view('admin.discount.manage', compact('products'));
     }
 

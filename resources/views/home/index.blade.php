@@ -179,17 +179,17 @@
 
         {{-- Product Name --}}
         <h5 class="fw-bold">{{ $product->product_name }}</h5>
-        Price : ${{ $product->regular_price }}
-
         {{-- Discount --}}
+        
         @if($product->discount_percent > 0)
+        
     <span class="text-danger fw-bold">{{ $product->discount_percent }}% OFF</span>
     <p>
-        <span class="text-decoration-line-through text-muted">${{ $product->regular_price }}</span>
+        <span class="text-decoration-line-through text-muted">Price ${{ $product->regular_price }}</span>
         <span class="fw-bold text-success ms-2">${{ $product->discounted_price }}</span>
     </p>
 @else
-    <p>${{ $product->regular_price }}</p>
+    <p> Price ${{ $product->regular_price }}</p>
 @endif
 
         <div class="d-flex gap-2 flex-wrap justify-content-center">
