@@ -8,7 +8,6 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
-
 use App\Models\Order;
 use Stripe\Stripe;
 use Stripe\Charge;

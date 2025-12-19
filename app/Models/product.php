@@ -4,6 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\Store;
+use App\Models\User;
+use App\Models\Productimage;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Comment;
+use App\Models\Review;
+
+
 class Product extends Model
 {
     protected $fillable = [
