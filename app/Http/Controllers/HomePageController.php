@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\category;
+use App\Models\Category;
 use App\Models\HomePageSetting;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -17,30 +17,6 @@ use Stripe\Checkout\Session as StripeSession;
 
 class HomePageController extends Controller
 {
-
- // Common discount calculator function
- /*  private function applyDiscount($product)
-{
-    if (!$product) return $product;
-
-    $reg = $product->regular_price ?? 0;
-
-    // Admin-defined discount only
-    $percent = $product->discount_percent ?? 0; 
-
-    if ($reg > 0 && $percent > 0) {
-        $dis = intval($reg - (($percent / 100) * $reg));
-        $product->discounted_price = $dis;
-        $product->discount_percent = $percent;
-    } else {
-        $product->discounted_price = $reg; 
-        $product->discount_percent = 0;
-    }
-
-    return $product;
-}*/
-
-
     // Home Page
     public function index()
 {
@@ -54,57 +30,24 @@ class HomePageController extends Controller
     $discountProducts = Product::with('images')
         ->where('discount_percent', '>', 0)
         ->get();
-
-
-       /* ->map(function($product) {
-            return $this->applyDiscount($product);
-        });
-
-    
-    $products = Product::with('images')->latest()->get()
-        ->map(function($product) {
-            return $this->applyDiscount($product);
-        });*/
-
         $products = Product::with('images')->latest()->get();
 
 
     return view('home.index', compact('homepagesetting', 'sliderProducts', 'products', 'discountProducts'));
 }
-
-
     // Category Page
     public function showCategoryProducts($category_name)
     {
         $category = Category::where('category_name', $category_name)->firstOrFail();
         $products = Product::with('images', 'category')
             ->where('category_id', $category->id) ->get();
-       /* $globalPercent = HomePageSetting::first()->discount_percent ?? 0;
-
-        $products = $products->map(function($product) use ($globalPercent) {
-            return $this->applyDiscount($product, $globalPercent);
-        });*/
-      
         return view('home.categories', compact('category', 'products'));
     }
-
-    // Product Details
-   /* public function viewdetails($id)
-    {
-        $product = Product::with('images', 'category')->findOrFail($id);
-        $homepagesetting = HomePageSetting::first();
-       // $percent = $homepagesetting->discount_percent ?? 0;
-       // $product = $this->applyDiscount($product, $percent);
-        return view('home.viewdetails', compact('product'));
-    }*/
-
     public function viewdetails($id)
 {
     $product = Product::with('images', 'category')->findOrFail($id);
     return view('home.viewdetails', compact('product'));
 }
-
-
     // Order Proceed
     public function orderproceed()
     {
@@ -154,13 +97,11 @@ class HomePageController extends Controller
             ->with('success', 'Order placed successfully! ' . strtoupper($order->payment_method))
             ->with('total', $total);
     }
-
     // Stripe payment page
     public function stripe($total)
     {
         return view('home.stripe', compact('total'));
     }
-
     // Stripe payment post
     public function stripePost(Request $request)
     {

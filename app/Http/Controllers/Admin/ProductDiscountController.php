@@ -9,10 +9,6 @@ use App\Models\product;
 
 class ProductDiscountController extends Controller
 {
-     // public  function manage(){
-     //   return view('admin.discount.manage');
-   // }
-
     public function index()
     {
         $products = Product::all();
