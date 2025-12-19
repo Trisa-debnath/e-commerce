@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Category;
-use App\Models\Subcategory;
-use App\Models\Store;
+use App\Models\category;
+use App\Models\subcategory;
+use App\Models\store;
 use App\Models\User;
-use App\Models\Productimage;
+use App\Models\productimage;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Comment;
